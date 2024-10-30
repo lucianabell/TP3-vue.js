@@ -4,33 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="icon" href="icon/logoitse.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
     <title>ITSE TV</title>
-    <link rel="icon" href="icon/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
     <!-- Encabezado -->
     <header>
-        <div align="center">
-            <a href="index.html">
-                <img src="icon/logoitse.png" width="20px" height="20px" alt="logo ITSE">
-                <span style="color:#555555;">ITSE TV</span>
+        <div class="contenedor-header">
+            <a href="index.html" class="logo">
+                <img src="icon/logoitse.png" alt="logo ITSE">
+                <span >ITSE TV</span>
             </a>
+            
+            
+            <!-- Botón de Menu -->
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <i class="fa-solid fa-bars" id="open"></i>
+                <i class="fa-solid fa-xmark" id="close"></i>
+            </label>
+            
+            <!-- Menú de Navegación -->
+            <nav id="nav-bar">
+                <!-- Lista Desordenada -->
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="programas.html">Programas</a></li>
+                    <li><a href="#articulos">Artículos</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
         </div>
-        <!-- Menú de Navegación -->
-        <nav>
-            <!-- Lista Desordenada -->
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="programas.html">Programas</a></li>
-                <li><a href="#articulos">Artículos</a></li>
-                <li><a href="#nosotros">Nosotros</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-        </nav>
     </header>
-
-
     <!-- Main -->
     <main>
         <section id="banner">
@@ -47,7 +69,7 @@
                 tecnología y la programación. Nuestro objetivo es inspirar, educar y conectar a nuestra audiencia con
                 expertos del sector y nuevas tendencias tecnológicas.</p>
 
-            <!-- Lista Ordenada -->
+             <!-- Lista Ordenada -->
             <h3>Nuestros Valores y Objetivos</h3>
             <ol>
                 <li><b>Innovación:</b> Fomentar la creatividad y el desarrollo tecnológico mediante contenidos
@@ -66,7 +88,7 @@
                 Tu navegador no soporta el elemento de audio.
             </audio>
         </section>
-        <hr>
+        
 
         <section id="articulos">
             <h2 align="center">Artículos Relacionados</h2>
@@ -97,7 +119,7 @@
 
         <section id="contacto">
             <h2>Contáctanos</h2>
-            <!-- Formulario de Contacto -->
+             <!-- Formulario de Contacto -->
             <form action="link" method="POST" style="width: 50%">
                 <label for="nombre">Nombre:</label><br>
                 <input type="text" id="nombre" name="nombre" size="50" required minlength="3" maxlength="100">
@@ -112,7 +134,7 @@
                 <input type="reset" value="Borrar">
             </form>
 
-            <h3>Ubicación del Canal</h3>
+            <h3>Ubicación del Canal</h3> 
             <!-- Iframe de ubicación -->
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3530.689490103664!2d-64.26317122546719!3d-27.757721829037838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x943b53d8980ffc8b%3A0x22b73749d79f860d!2sITSE%20-%20Instituto%20Tecnol%C3%B3gico%20de%20Santiago%20del%20Estero!5e0!3m2!1ses!2sar!4v1727534753884!5m2!1ses!2sar"
