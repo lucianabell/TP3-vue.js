@@ -205,6 +205,11 @@ header {
   #footer {
     background-color: var(--fondo1);
   }
+
+  #banner {
+    height: 90vh;
+  }
+
   
   }
 
