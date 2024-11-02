@@ -247,7 +247,7 @@ nav a:hover {
 #programas,
 #articulos,
 #contacto {
-  margin: 0 auto ;
+  margin: 0 auto;
   width: 90%;
   padding: 60px 30px 60px;
 }
@@ -259,7 +259,7 @@ nav a:hover {
     "nosotros"
     "nosotros-lista"
     "audio";
-    transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .contenedor-nosotros {
@@ -270,7 +270,6 @@ nav a:hover {
 .nosotros-lista {
   grid-area: nosotros-lista;
   transition: transform 0.5s ease;
-
 }
 
 .contenedor-nosotros h2 {
@@ -339,7 +338,6 @@ nav a:hover {
   padding: 10px;
   outline: none;
 }
-
 
 #articulos {
   box-shadow: 2px 22px px rgba(0, 0, 0, 0.5);
@@ -470,7 +468,6 @@ nav a:hover {
   max-width: 400px;
 }
 
-
 .ubicacion iframe {
   width: 100%;
   border: none;
@@ -509,7 +506,6 @@ nav a:hover {
   border: #d6d6d6 1px solid;
 }
 
-
 .form-btn {
   display: flex;
   justify-content: space-between;
@@ -528,7 +524,6 @@ input[type="submit"] {
 input[type="reset"] {
   background-color: transparent;
   color: #ffffff;
-
 }
 
 input[type="reset"]:hover {
@@ -551,7 +546,6 @@ input[type="submit"]:hover {
   color: var(--blanco) !important;
   cursor: pointer;
 }
-
 
 footer {
   background-color: var(--negro);
@@ -599,17 +593,181 @@ footer p {
   transform: scale(1.2);
 }
 
+#programacion {
+  width: 90%;
+  margin: 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#programacion h2,
+#horario h2,
+#transmision h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 1.3rem;
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+.carrusel-programacion {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.card {
+  display: none;
+  width: 100%;
+  max-width: 600px;
+}
+
+.card iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 5px;
+}
+
+.card h3 {
+  padding: 10px 0;
+  font-size: 1.1rem;
+  color: #218da5;
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+.card p {
+  text-align: justify;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  color: #555555;
+}
+
+.control {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.carrusel-programacion input[type="radio"] {
+  display: none;
+}
+
+#control1:checked ~ .card-1,
+#control2:checked ~ .card-2 {
+  display: block;
+}
+
+.control label i {
+  cursor: pointer;
+  font-size: 10px;
+}
+
+#control1:checked ~ .control label[for="control1"] i,
+#control2:checked ~ .control label[for="control2"] i {
+  background-color: #555555;
+  border-radius: 50%;
+}
+
+#horario {
+  width: 100%;
+  background-color: var(--fondo1);
+  padding: 60px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-tabla {
+  width: 90%;
+  margin: 20px auto 0;
+}
+
+table {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+th {
+  background-color: #dbdbdb;
+}
+
+#transmision {
+  width: 90%;
+  max-width: 600px;
+
+  padding: 60px 0 30px;
+  margin: 0 auto;
+}
+
+#transmision iframe {
+  margin-top: 10px;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 5px;
+}
+
+#btn-subir {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #218da5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  display: none;
+}
+
+#btn-subir:hover {
+  background-color: var(--negro);
+}
+
 @media (min-width: 600px) {
   /* main */
 
   #banner {
     height: 60vh;
-}
+  }
 
+  
 }
 
 @media (min-width: 872px) {
-  
   #articulos {
     width: 100%;
     margin: 0 auto;
@@ -620,8 +778,11 @@ footer p {
     overflow: hidden;
     justify-content: center;
   }
-  
+  #btn-subir {
+    display: flex;
+  }
 }
+  
 
 @media (min-width: 992px) {
   .contenedor-header .logo img {
@@ -689,44 +850,43 @@ footer p {
   }
 
   .btn-banner {
-    border:none;
+    border: none;
     padding: 10px 25px;
     font-size: 1.1rem;
   }
 
-    
-.btn-banner::before {
-  content: " ";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 10px;
-  height: 10px;
-  border-top: 2px solid #d45f34;
-  border-left: 2px solid #d45f34;
-  transition: 0.5s;
-  transition-delay: 0.5s;
-}
+  .btn-banner::before {
+    content: " ";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid #d45f34;
+    border-left: 2px solid #d45f34;
+    transition: 0.5s;
+    transition-delay: 0.5s;
+  }
 
-.btn-banner::after {
-  content: " ";
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 10px;
-  height: 10px;
-  border-bottom: 2px solid #d45f34;
-  border-right: 2px solid #d45f34;
-  transition: 0.5s;
-  transition-delay: 0.5s;
-}
+  .btn-banner::after {
+    content: " ";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 10px;
+    height: 10px;
+    border-bottom: 2px solid #d45f34;
+    border-right: 2px solid #d45f34;
+    transition: 0.5s;
+    transition-delay: 0.5s;
+  }
 
-.btn-banner:hover::before,
-.btn-banner:hover::after {
-  width: 100%;
-  height: 100%;
-  transition-delay: 0.5s;
-}
+  .btn-banner:hover::before,
+  .btn-banner:hover::after {
+    width: 100%;
+    height: 100%;
+    transition-delay: 0.5s;
+  }
 
   #nosotros {
     display: grid;
@@ -782,19 +942,15 @@ footer p {
     font-size: 1.2rem;
   }
 
-
-
   #articulos h2 {
     margin-top: 10px;
     font-size: 1.5rem;
   }
 
-
   .carrusel {
     width: 90%;
   }
 
- 
   #articulos article {
     flex: 0 1 auto;
     height: 410px;
@@ -816,6 +972,7 @@ footer p {
 
   #contacto {
     padding: 60px 0;
+    align-items: stretch;
   }
 
   .ubicacion {
@@ -823,7 +980,11 @@ footer p {
     padding: 0;
     margin-right: 20px;
   }
-  
+
+  .ubicacion h3 {
+    margin-bottom: 10px;
+  }
+
   .contacto {
     margin-left: 20px;
     order: 1;
@@ -841,12 +1002,11 @@ footer p {
   }
 
   #nosotros,
-#programas,
-#articulos,
-#contacto {
-  padding: 70px 30px 60px;
-}
-
+  #programas,
+  #articulos,
+  #contacto {
+    padding: 70px 30px 60px;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -865,5 +1025,4 @@ footer p {
     margin: 0 auto;
     max-width: 600px;
   }
-
 }
