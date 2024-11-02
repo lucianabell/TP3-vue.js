@@ -26,23 +26,29 @@
 <body>
     <!-- Encabezado -->
     <header>
-        <div align="center">
-            <a href="index.html">
-                <img src="icon/logoitse.png" width="20px" height="20px" alt="logo ITSE">
-                <span style="color:#555555;">ITSE TV</span>
+        <div class="contenedor-header">
+            <a href="index.html" class="logo">
+                <img src="icon/logoitse.png" alt="logo ITSE">
+                <span>ITSE TV</span>
             </a>
+            <!-- Botón de Menu -->
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <i class="fa-solid fa-bars" id="open"></i>
+                <i class="fa-solid fa-xmark" id="close"></i>
+            </label>
+            <!-- Menú de Navegación -->
+            <nav id="nav-bar">
+                <!-- Lista Desordenada -->
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="programas.html">Programas</a></li>
+                    <li><a href="#articulos">Artículos</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
         </div>
-        <!-- Menú de Navegación -->
-        <nav>
-            <!-- Lista Desordenada -->
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="programas.html">Programas</a></li>
-                <li><a href="index.html#articulos">Artículos</a></li>
-                <li><a href="index.html#nosotros">Nosotros</a></li>
-                <li><a href="index.html#contacto">Contacto</a></li>
-            </ul>
-        </nav>
     </header>
 
     <main>
@@ -117,10 +123,13 @@
         <br>
     </main>
     <!-- Footer -->
-    <footer style="background-color: #2b2b2b; color: #ffffff;">
-        <br>
-        <p align="center">&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
-        <br>
+    <footer>
+        <div class="redes">
+            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
     </footer>
 </body>
 

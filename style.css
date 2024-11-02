@@ -630,7 +630,7 @@ footer p {
   }
 
   .contenedor-header .logo span {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   /* menu responsive */
@@ -854,6 +854,7 @@ footer p {
   #programas {
     width: 80%;
     padding: 70px 30px 60px;
+    margin: 0 auto;
   }
 
   #carrusel {
