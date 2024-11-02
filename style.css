@@ -115,7 +115,7 @@ header {
   color: #218da5;
 }
 
-#articulos{
+#articulos, #horario{
   background-color: var(--fondo1);
 }
 
@@ -192,6 +192,8 @@ header {
   z-index: 1000;
 }
 
+
+
 @media (min-width: 768px) {
   .carrusel{
     justify-content: center;
@@ -209,8 +211,6 @@ header {
   #banner {
     height: 90vh;
   }
-
-  
   }
 
 
