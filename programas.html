@@ -7,13 +7,6 @@
     <!-- Favicon -->
     <link rel="icon" href="icon/logoitse.png" type="image/x-icon">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -31,12 +24,12 @@
 <body>
     <a id="top"></a>
     <!-- Encabezado -->
-    <header class="py-2">
-        <div class=" px-5">
+    <header class="py-2 bg-body-secondary position-sticky top-0 z-3">
+        <div class="px-5">
             <nav class="navbar navbar-expand-sm">
                 <a href="index.html" class="navbar-brand d-flex align-items-center">
                     <img src="icon/logoitse.png" alt="logo ITSE" class="me-2" style="width: 30px;">
-                    <span class="h5 mb-0 text-logo ">ITSE TV</span>
+                    <span class="h5 mb-0 text-secondary fw-bold fs-6 ">ITSE TV</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,37 +38,47 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto mt-2">
-                        <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-                        <li class="nav-item"><a href="programas.html" class="nav-link">Programas</a></li>
-                        <li class="nav-item"><a href="#articulos" class="nav-link">Artículos</a></li>
-                        <li class="nav-item"><a href="#nosotros" class="nav-link">Nosotros</a></li>
-                        <li class="nav-item"><a href="#contacto" class="nav-link">Contacto</a></li>
+                        <li class="nav-item"><a href="index.html" class="nav-link text-secondary-emphasis">Inicio</a>
+                        </li>
+                        <li class="nav-item"><a href="programas.html"
+                                class="nav-link text-secondary-emphasis">Programas</a></li>
+                        <li class="nav-item"><a href="#articulos" class="nav-link text-secondary-emphasis">Artículos</a>
+                        </li>
+                        <li class="nav-item"><a href="#nosotros" class="nav-link text-secondary-emphasis">Nosotros</a>
+                        </li>
+                        <li class="nav-item"><a href="#contacto" class="nav-link text-secondary-emphasis">Contacto</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         </div>
     </header>
-
     <main>
         <section id="programacion" class="container py-4">
-            <h4 class="text-center mb-4 fw-bold text-secondary mb-3">Nuestra Programación
+            <h4 class="text-center mt-2 fw-bold text-secondary-emphasis mb-4">Nuestra Programación
             </h4>
 
             <!-- Carrusel de Programación -->
-            <div id="programacionCarousel" class="carousel carousel-dark slide w-100 mx-auto" style="max-width: 800px;" data-bs-ride="carousel">
-                
+            <div id="programacionCarousel" class="carousel carousel-dark slide w-100 mx-auto" style="max-width: 800px;"
+                data-bs-ride="carousel">
+
                 <div class="carousel-inner px-5 d-flex align-items-stretch">
                     <!-- Primer Slide -->
                     <div class="carousel-item active px-2">
-                        <div class="card d-flex flex-column  p-3  mx-auto h-100" style="max-width: 600px; border: none;">
-                            <iframe src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen ></iframe>
+                        <div class="card d-flex flex-column  p-3  mx-auto h-100"
+                            style="max-width: 600px; border: none;">
+                            <div class="w-100 mx-auto  object-fit-cover ratio-16x9">
+
+                                <iframe src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
 
                             <div class="card-body px-0">
                                 <h4 class="fs-5 fw-bold">¿Qué programamos?</h4>
-                                <p class="card-text text-secondary">Acompáñanos a explorar el alcance e impacto de la programación en
+                                <p class="card-text text-secondary">Acompáñanos a explorar el alcance e impacto de la
+                                    programación en
                                     nuestras vidas a través
                                     de un ciclo de entrevistas con expertos en programación.</p>
                             </div>
@@ -83,17 +86,21 @@
                     </div>
                     <div class="carousel-item ">
                         <div class="card d-flex flex-column  mx-auto p-3 h-100" style="max-width: 600px; border: none;">
-                            <iframe src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
+                            <div class="w-100 mx-auto  object-fit-cover ratio-16x9">
 
-                                <div class="card-body px-0">
-                                    <h4 class="fs-5 fw-bold ">Historia de la programación</h4>
-                                    <p class="card-text text-secondary">Un recorrido por los eventos históricos que marcaron el avance de
-                                        la
-                                        programación.</p>
-                                </div>
+                                <iframe src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
+
+                            <div class="card-body px-0">
+                                <h4 class="fs-5 fw-bold ">Historia de la programación</h4>
+                                <p class="card-text text-secondary-emphasis">Un recorrido por los eventos históricos que marcaron
+                                    el avance de
+                                    la
+                                    programación.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,35 +119,35 @@
     </main>
 
     <section id="horario" class="p-5 bg-light">
-        <h4 class="text-center mb-4 fw-bold text-secondary">Horarios</h4>
+        <h4 class="text-center mb-4 fw-bold text-secondary-emphasis">Horarios</h4>
         <!-- Tabla -->
         <div class="container mt-3 mt-3 d-flex justify-content-center table-responsive">
             <table class="table table-light table-bordered text-center " style="max-width: 600px;">
                 <thead class="table-secondary ">
-                    <tr class="text-secondary">
-                        <th class="text-secondary">Día</th>
-                        <th class="text-secondary">Programa</th>
-                        <th class="text-secondary">Horario</th>
+                    <tr class="text-secondary-emphasis">
+                        <th class="text-secondary-emphasis">Día</th>
+                        <th class="text-secondary-emphasis">Programa</th>
+                        <th class="text-secondary-emphasis">Horario</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-secondary">Martes</td>
-                        <td class="text-secondary">¿Qué programamos?</td>
-                        <td class="text-secondary">8:00 PM</td>
+                        <td class="text-secondary-emphasis">Martes</td>
+                        <td class="text-secondary-emphasis">¿Qué programamos?</td>
+                        <td class="text-secondary-emphasis">8:00 PM</td>
                     </tr>
                     <tr>
-                        <td class="text-secondary">Jueves</td>
-                        <td class="text-secondary">Historia de la programación</td>
-                        <td class="text-secondary">9:00 PM</td>
+                        <td class="text-secondary-emphasis">Jueves</td>
+                        <td class="text-secondary-emphasis">Historia de la programación</td>
+                        <td class="text-secondary-emphasis">9:00 PM</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <section id="transmision" class="container my-5">
-        <h4 class="text-center mb-4 fw-bold text-secondary">Transmisión en Vivo</h4>
+    <section id="transmision" class="container container-sm container-lg my-5 ">
+        <h4 class="text-center mb-4 fw-bold text-secondary-emphasis">Transmisión en Vivo</h4>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="ratio ratio-16x9">
@@ -153,22 +160,23 @@
         </div>
     </section>
 
-    <a href="#top" id="btn-subir"><i class="fa-solid fa-arrow-up"></i></a>
+    <a href="#top" id="btn-subir" class="btn btn-primary rounded-circle position-fixed z-2 border-0"
+        style="bottom: 20px; right: 20px; "><i class="fa-solid fa-arrow-up"></i></a>
     </main>
     <!-- Footer -->
-    <footer class="bg-light text-center p-3">
-        <div class="redes d-flex justify-content-center align-items-center g-5 my-3 mx-auto text-secondary">
-            <a href="https://www.facebook.com" target="_blank" class="text-decoration-none me-3">
+    <footer class="bg-dark text-center p-3">
+        <div class="redes d-flex justify-content-center align-items-center g-5 my-3 mx-auto">
+            <a href="https://www.facebook.com" target="_blank" class="text-decoration-none text-secondary me-3">
                 <i class="fab fa-facebook fa-lg "></i>
             </a>
-            <a href="https://www.instagram.com/" target="_blank" class="text-decoration-none me-3">
+            <a href="https://www.instagram.com/" target="_blank" class="text-decoration-none text-secondary me-3">
                 <i class="fab fa-instagram fa-lg "></i>
             </a>
-            <a href="https://www.youtube.com/" target="_blank" class="text-decoration-none">
+            <a href="https://www.youtube.com/" target="_blank" class="text-decoration-none text-secondary">
                 <i class="fab fa-youtube fa-lg "></i>
             </a>
         </div>
-        <p class="mb-0 fs-6">&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
+        <p class="mb-0 fs-6  text-secondary">&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
     </footer>
 </body>
 
