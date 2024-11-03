@@ -133,18 +133,6 @@ header {
   background-color: var(--negro);
 }
 
-
-
-
-
-.redes {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 10px auto;
-}
-
 .redes a {
   cursor: pointer;
 }
