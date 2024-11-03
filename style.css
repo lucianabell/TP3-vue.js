@@ -156,7 +156,7 @@ nav a:hover {
 
 #banner {
   width: 100%;
-  height: 60vh;
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -761,7 +761,7 @@ th {
   /* main */
 
   #banner {
-    height: 60vh;
+    height: 80vh;
   }
 
   
@@ -954,7 +954,7 @@ th {
   #articulos article {
     flex: 0 1 auto;
     height: 410px;
-    max-width: 400px;
+        max-width: 400px;
   }
 
   #articulos article img {
@@ -1018,7 +1018,7 @@ th {
   }
 
   #carrusel {
-    width: 80%;
+    width: 90%;
   }
 
   .ubicacion iframe {
