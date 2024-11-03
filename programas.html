@@ -32,7 +32,7 @@
     <a id="top"></a>
     <!-- Encabezado -->
     <header class="py-2">
-        <div class="container px-4">
+        <div class=" px-5">
             <nav class="navbar navbar-expand-sm">
                 <a href="index.html" class="navbar-brand d-flex align-items-center">
                     <img src="icon/logoitse.png" alt="logo ITSE" class="me-2" style="width: 30px;">
@@ -57,42 +57,46 @@
     </header>
 
     <main>
-        <section id="programacion">
-            <h2 class="text-center">Nuestra Programación</h2>
+        <section id="programacion" class="container py-4">
+            <h4 class="text-center mb-4 fw-bold text-secondary mb-3">Nuestra Programación
+            </h4>
 
             <!-- Carrusel de Programación -->
-            <div id="programacionCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-
+            <div id="programacionCarousel" class="carousel carousel-dark slide w-100 mx-auto" style="max-width: 800px;" data-bs-ride="carousel">
+                
+                <div class="carousel-inner px-5 d-flex align-items-stretch">
                     <!-- Primer Slide -->
-                    <div class="carousel-item active">
-                        <div class="d-flex flex-column align-items-center">
-                            <iframe width="560" height="315"
-                                src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
+                    <div class="carousel-item active px-2">
+                        <div class="card d-flex flex-column  p-3  mx-auto h-100" style="max-width: 600px; border: none;">
+                            <iframe src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen ></iframe>
+
+                            <div class="card-body px-0">
+                                <h4 class="fs-5 fw-bold">¿Qué programamos?</h4>
+                                <p class="card-text text-secondary">Acompáñanos a explorar el alcance e impacto de la programación en
+                                    nuestras vidas a través
+                                    de un ciclo de entrevistas con expertos en programación.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item ">
+                        <div class="card d-flex flex-column  mx-auto p-3 h-100" style="max-width: 600px; border: none;">
+                            <iframe src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
                                 title="YouTube video player" frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen></iframe>
-                            <h3>¿Qué programamos?</h3>
-                            <p class="text-center">Acompáñanos a explorar el alcance e impacto de la programación en nuestras vidas a través
-                                de un ciclo de entrevistas con expertos en programación.</p>
+
+                                <div class="card-body px-0">
+                                    <h4 class="fs-5 fw-bold ">Historia de la programación</h4>
+                                    <p class="card-text text-secondary">Un recorrido por los eventos históricos que marcaron el avance de
+                                        la
+                                        programación.</p>
+                                </div>
                         </div>
                     </div>
-
-                    <!-- Segundo Slide -->
-                    <div class="carousel-item">
-                        <div class="d-flex flex-column align-items-center">
-                            <iframe width="560" height="315"
-                                src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
-                            <h3>Historia de la programación</h3>
-                            <p class="text-center">Un recorrido por los eventos históricos que marcaron el avance de la programación.</p>
-                        </div>
-                    </div>
-
                 </div>
-
                 <!-- Controles del Carrusel -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#programacionCarousel"
                     data-bs-slide="prev">
@@ -102,32 +106,33 @@
                     data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
+
             </div>
         </section>
     </main>
 
-    <section id="horario" class="p-5">
-        <h3 class="text-center">Horarios</h3>
+    <section id="horario" class="p-5 bg-light">
+        <h4 class="text-center mb-4 fw-bold text-secondary">Horarios</h4>
         <!-- Tabla -->
         <div class="container mt-3 mt-3 d-flex justify-content-center table-responsive">
-            <table class="table table-bordered text-center" style="max-width: 600px;">
-                <thead>
-                    <tr>
-                        <th>Día</th>
-                        <th>Programa</th>
-                        <th>Horario</th>
+            <table class="table table-light table-bordered text-center " style="max-width: 600px;">
+                <thead class="table-secondary ">
+                    <tr class="text-secondary">
+                        <th class="text-secondary">Día</th>
+                        <th class="text-secondary">Programa</th>
+                        <th class="text-secondary">Horario</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Martes</td>
-                        <td>¿Qué programamos?</td>
-                        <td>8:00 PM</td>
+                        <td class="text-secondary">Martes</td>
+                        <td class="text-secondary">¿Qué programamos?</td>
+                        <td class="text-secondary">8:00 PM</td>
                     </tr>
                     <tr>
-                        <td>Jueves</td>
-                        <td>Historia de la programación</td>
-                        <td>9:00 PM</td>
+                        <td class="text-secondary">Jueves</td>
+                        <td class="text-secondary">Historia de la programación</td>
+                        <td class="text-secondary">9:00 PM</td>
                     </tr>
                 </tbody>
             </table>
@@ -135,22 +140,23 @@
     </section>
 
     <section id="transmision" class="container my-5">
-        <h2 class="text-center mb-4">Transmisión en Vivo</h2>
+        <h4 class="text-center mb-4 fw-bold text-secondary">Transmisión en Vivo</h4>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/7NOSDKb0HlU?si=RsjgURqpdA4ehmw3" title="YouTube video player"
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    <iframe src="https://www.youtube.com/embed/7NOSDKb0HlU?si=RsjgURqpdA4ehmw3"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <a href="#top" id="btn-subir"><i class="fa-solid fa-arrow-up"></i></a>
     </main>
     <!-- Footer -->
-    <footer class="text-center p-3">
+    <footer class="bg-light text-center p-3">
         <div class="redes mb-3">
             <a href="https://www.facebook.com" target="_blank" class="text-decoration-none me-3">
                 <i class="fab fa-facebook fa-lg"></i>

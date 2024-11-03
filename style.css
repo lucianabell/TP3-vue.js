@@ -53,7 +53,7 @@ header {
 /*banner  */
 
 #banner {
-  height: 60vh;
+  height: 70vh;
   position: relative;
 }
 
@@ -115,7 +115,7 @@ header {
   color: #218da5;
 }
 
-#articulos, #horario{
+#articulos{
   background-color: var(--fondo1);
 }
 
@@ -129,15 +129,13 @@ header {
 }
 
 #contacto {
+  margin: 0 auto;
   background-color: var(--negro);
-}
-.contanto{
-  order: -1;
 }
 
-#footer {
-  background-color: var(--negro);
-}
+
+
+
 
 .redes {
   display: flex;
@@ -192,23 +190,45 @@ header {
   z-index: 1000;
 }
 
-@media (min-width: 768px) {
-  .carrusel{
-    justify-content: center;
-  }
+.carousel-item iframe{
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover
+}
 
-  .contanto{
-    order: 2;
-  }
+
+.carousel-item .card-body h4{
+  color: #218da5;
+
+}
+
+.card-text{
+  font-size: 0.9rem;
+  text-align: justify;
+}
+
+
+
+
+@media (min-width: 768px) {
+
+#articulos > div{
+  justify-content: center;
+}
+#banner {
+  height: 80vh;
+}
+
   }
 @media (min-width: 992px) {
+  #banner {
+    height: 90vh;
+  }
   #footer {
     background-color: var(--fondo1);
   }
 
-  #banner {
-    height: 90vh;
-  }
+
   }
 
 

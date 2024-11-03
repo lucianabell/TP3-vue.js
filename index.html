@@ -33,7 +33,7 @@
     <a id="top"></a>
     <!-- Encabezado -->
     <header class="py-2">
-        <div class="container px-4">
+        <div class="px-5">
             <nav class="navbar navbar-expand-sm">
                 <a href="index.html" class="navbar-brand d-flex align-items-center">
                     <img src="icon/logoitse.png" alt="logo ITSE" class="me-2" style="width: 30px;">
@@ -59,22 +59,22 @@
 
     <!-- Main -->
     <main>
-        <section id="banner" class="d-flex align-items-center justify-content-center w-100">
+        <section id="banner" class="d-flex align-items-center justify-content-center w-100 h-90">
             <img src="img/itse.jpeg" alt="itse" class="w-100 h-100 banner-imagen">
             <div class="row">
                 <div class="col-12 d-flex align-items-center justify-content-center banner-titulo">
                     <img src="icon/logoitse.png" alt="logo itse tv">
                     <h1>ITSE TV</h1>
                 </div>
-                <p>El mejor contenido sobre tecnología y programación</p>
+                <p class="px-2">El mejor contenido sobre tecnología y programación</p>
                 <a href="programas.html" class="btn btn-sm btn-lg btn-info btn-banner text-white fw-bold">Ver
                     Programas</a>
             </div>
             <div class="opacity w-100 h-100 bg-black"></div>
         </section>
 
-        <section id="nosotros" class="container p-5">
-            <div class="row g-5">
+        <section id="nosotros" class="p-5">
+            <div class="row g-5 align-items-stretch mx-auto" >
                 <div class="col-lg-6">
                     <div class="row mb-3">
                         <h4 class="fw-bold">Sobre Nosotros</h4>
@@ -117,76 +117,83 @@
 
         <section id="articulos" class="p-5 bg-light">
             <h2 class="text-center fs-4 fw-bold mb-3">Artículos Relacionados</h2>
-            <div class="d-flex flex-nowrap overflow-auto gap-4 carrusel">
-                <div class="card shadow-sm" style="min-width: 18rem; max-width: 20rem;">
+            <div class="d-flex flex-nowrap overflow-auto gap-4 carrusel mb-4">
+                <div class="card shadow-sm" style="min-width:18rem;max-width: 20rem;">
                     <img src="img/articulo1.jpg" class="card-img-top rounded-top" alt="inteligencia-artificial">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fs-5">Inteligencia Artificial y su Impacto</h5>
-                        <p class="card-text flex-grow-1">Explora cómo la inteligencia artificial está cambiando el
+                        <h5 class="card-title text-secondary fs-5">Inteligencia Artificial y su Impacto</h5>
+                        <p class="card-text text-secondary flex-grow-1">Explora cómo la inteligencia artificial está cambiando el
                             mundo...</p>
                         <a href="https://ojs.hospitalitaliano.org.ar/index.php/revistahi/article/view/323"
-                            target="_blank" class="stretched-link text-primary fw-bold">Leer más...</a>
+                            target="_blank" class="stretched-link text-primary fw-bold opacity-75">Leer más...</a>
                     </div>
                 </div>
-                <div class="card shadow-sm" style="min-width: 18rem; max-width: 20rem;">
+                <div class="card shadow-sm" style="min-width:18rem;max-width: 20rem;">
                     <img src="img/articulo2.jpg" alt="programacion-principiantes" class="card-img-top rounded-top">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Programación para principiantes</h5>
-                        <p class="card-text flex-grow-1">Descubre cómo empezar en el mundo de la programación...</p>
+                        <h5 class="card-title text-secondary">Programación para principiantes</h5>
+                        <p class="card-text text-secondary flex-grow-1">Descubre cómo empezar en el mundo de la programación...</p>
                         <a href="https://platzi.com/blog/como-aprender-a-programar/" target="_blank"
-                            class="stretched-link text-primary fw-bold">Leer más...</a>
+                            class="stretched-link text-primary fw-bold opacity-75">Leer más...</a>
                     </div>
                 </div>
-                <div class="card shadow-sm" style="min-width: 18rem; max-width: 20rem;">
+                <div class="card shadow-sm" style="min-width:18rem;max-width: 20rem;">
                     <img src="img/articulo3.jpg" alt="nuevas-tecnologias" class="card-img-top rounded-top">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Nuevas Tecnologías y usos para la programación</h5>
-                        <p class="card-text flex-grow-1">Un análisis de las nuevas tecnologías informáticas y sus
+                        <h5 class="card-title text-secondary">Nuevas Tecnologías y usos para la programación</h5>
+                        <p class="card-text text-secondary flex-grow-1">Un análisis de las nuevas tecnologías informáticas y sus
                             aplicaciones...</p>
                         <a href="https://www.euroinnova.com/blog/nuevas-tecnologias-informaticas" target="_blank"
-                            class="stretched-link text-primary fw-bold">Leer más...</a>
+                            class="stretched-link text-primary fw-bold opacity-75">Leer más...</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contacto" class="p-5 row d-flex flex-wrap g-4">
-            <div class="col-12 col-md-6 contacto order-1 order-md-2 mb-3">
-                <h4 class="text-center text-white mb-3">Contáctanos</h4>
-                <!-- Formulario de Contacto -->
-                <form action="link" method="POST" id="form-contacto">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label  text-white">Nombre:</label>
-                        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" required minlength="3" maxlength="100">
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label text-white">Correo Electrónico:</label>
-                        <input type="email" class="form-control form-control-sm" id="email" name="email" required maxlength="100">
-                    </div>
-                    <div class="mb-3">
-                        <label for="mensaje" class="form-label text-white">Mensaje:</label>
-                        <textarea class="form-control form-control-sm" id="mensaje" name="mensaje" rows="3" required></textarea>
-                    </div>
-                    <div class="form-btn btn-group-sm">
-                        <button type="submit" class="btn btn-info text-white fw-bold">Enviar</button>
-                        <button type="reset" class="btn btn-secondary">Borrar</button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-12 col-md-6 ubicacion order-2 order-md-1 mb-3">
-                <h4 class="text-center text-white mb-3">Ubicación del Canal</h4>
-                <!-- Iframe de ubicación -->
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3530.689490103664!2d-64.26317122546719!3d-27.757721829037838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x943b53d8980ffc8b%3A0x22b73749d79f860d!2sITSE%20-%20Instituto%20Tecnol%C3%B3gico%20de%20Santiago%20del%20Estero!5e0!3m2!1ses!2sar!4v1727534753884!5m2!1ses!2sar"
-                    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+        <section id="contacto" class="p-4">
+            <div class="w-100 mx-auto py-5  row d-flex flex-wrap justify-content-evenly align-items-center g-4">
+
+                <div class="col-12 col-md-6 contacto order-1 order-md-2 mb-3" style="max-width: 500px;">
+                    <h4 class="text-center text-white mb-3">Contáctanos</h4>
+                    <!-- Formulario de Contacto -->
+                    <form action="link" method="POST" id="form-contacto">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label  text-white">Nombre:</label>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" required
+                                minlength="3" maxlength="100">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-white">Correo Electrónico:</label>
+                            <input type="email" class="form-control form-control-sm" id="email" name="email" required
+                                maxlength="100">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensaje" class="form-label text-white">Mensaje:</label>
+                            <textarea class="form-control form-control-sm" id="mensaje" name="mensaje" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="form-btn btn-group-sm d-flex justify-content-center g-4">
+                            <button type="reset" class="btn btn-secondary w-50 me-4">Borrar</button>
+                            <button type="submit" class="btn btn-info opacity-80 text-white fw-bold w-50 ">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6 ubicacion order-2 order-md-1 mb-3" style="max-width: 500px;">
+                    <h4 class="text-center text-white mb-3">Ubicación del Canal</h4>
+                    <!-- Iframe de ubicación -->
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3530.689490103664!2d-64.26317122546719!3d-27.757721829037838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x943b53d8980ffc8b%3A0x22b73749d79f860d!2sITSE%20-%20Instituto%20Tecnol%C3%B3gico%20de%20Santiago%20del%20Estero!5e0!3m2!1ses!2sar!4v1727534753884!5m2!1ses!2sar"
+                        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </section>
         <a href="#top" id="btn-subir" class="btn btn-primary rounded-circle"><i class="fa-solid fa-arrow-up"></i></a>
     </main>
 
     <!-- Footer -->
-    <footer class="text-center p-3">
+    <footer class="bg-light text-center p-3">
         <div class="redes mb-3">
             <a href="https://www.facebook.com" target="_blank" class="text-decoration-none me-3">
                 <i class="fab fa-facebook fa-lg"></i>
@@ -200,7 +207,7 @@
         </div>
         <p class="mb-0 fs-6">&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
     </footer>
-    
+
 </body>
 
 </html>
