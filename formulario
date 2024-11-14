@@ -1,0 +1,242 @@
+TYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reserva de Vuelo</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Formulario de Reserva de Vuelo</h1>
+
+        <form @submit.prevent="submitForm">
+            <fieldset>
+                <legend>Datos del Pasajero</legend>
+                <label>
+                    Nombre Completo:
+                    <input type="text" v-model="pasajero.nombre" @input="validateNombre" />
+                    <span :class="{'error': !validaciones.nombre, 'success': validaciones.nombre}">
+                        {{ mensajesError.nombre }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Número de Pasaporte:
+                    <input type="text" v-model="pasajero.pasaporte" @input="validatePasaporte" />
+                    <span :class="{'error': !validaciones.pasaporte, 'success': validaciones.pasaporte}">
+                        {{ mensajesError.pasaporte }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Nacimiento:
+                    <input type="text" v-model="pasajero.fechaNacimiento" placeholder="dd/mm/yyyy"
+                        @input="validateFechaNacimiento" />
+                    <span :class="{'error': !validaciones.fechaNacimiento, 'success': validaciones.fechaNacimiento}">
+                        {{ mensajesError.fechaNacimiento }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Nacionalidad:
+                    <select v-model="pasajero.nacionalidad">
+                        <option disabled value="">Selecciona un país</option>
+                        <option v-for="pais in paises" :key="pais" :value="pais">{{ pais }}</option>
+                    </select>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos del Vuelo</legend>
+                <label>
+                    Ciudad de Origen:
+                    <select v-model="vuelo.origen" @change="validateCiudad">
+                        <option disabled value="">Selecciona una ciudad</option>
+                        <option v-for="aeropuerto in aeropuertos" :key="aeropuerto" :value="aeropuerto">{{ aeropuerto }}
+                        </option>
+                    </select>
+                </label>
+                <br>
+                <label>
+                    Ciudad de Destino:
+                    <select v-model="vuelo.destino" @change="validateCiudad">
+                        <option disabled value="">Selecciona una ciudad</option>
+                        <option v-for="aeropuerto in aeropuertos" :key="aeropuerto" :value="aeropuerto">{{ aeropuerto }}
+                        </option>
+                    </select>
+                    <span :class="{'error': !validaciones.ciudad, 'success': validaciones.ciudad}">
+                        {{ mensajesError.ciudad }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Salida:
+                    <input type="date" v-model="vuelo.fechaSalida" @input="validateFechaSalida" />
+                </label>
+                <br>
+                <label>
+                    Fecha de Regreso:
+                    <input type="date" v-model="vuelo.fechaRegreso" @input="validateFechaRegreso" />
+                    <span :class="{'error': !validaciones.fechaRegreso, 'success': validaciones.fechaRegreso}">
+                        {{ mensajesError.fechaRegreso }}
+                    </span>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos de Pago</legend>
+                <label>
+                    Número de Tarjeta de Crédito:
+                    <input type="text" v-model="pago.numeroTarjeta" @input="validateTarjeta" />
+                    <span :class="{'error': !validaciones.tarjeta, 'success': validaciones.tarjeta}">
+                        {{ mensajesError.tarjeta }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Vencimiento:
+                    <input type="text" v-model="pago.fechaVencimiento" placeholder="MM/AA"
+                        @input="validateFechaVencimiento" />
+                </label>
+                <br>
+                <label>
+                    CVV:
+                    <input type="text" v-model="pago.cvv" @input="validateCVV" />
+                </label>
+                <br>
+                <label>
+                    Nombre en la Tarjeta:
+                    <input type="text" v-model="pago.nombreTarjeta" @input="validateNombreTarjeta" />
+                </label>
+            </fieldset>
+
+            <button type="submit" :disabled="!formularioValido">Reservar</button>
+            <p v-if="!formularioValido" class="error">Completa todos los campos correctamente para habilitar el botón
+            </p>
+        </form>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    pasajero: {
+                        nombre: '',
+                        pasaporte: '',
+                        fechaNacimiento: '',
+                        nacionalidad: ''
+                    },
+                    vuelo: {
+                        origen: '',
+                        destino: '',
+                        fechaSalida: '',
+                        fechaRegreso: ''
+                    },
+                    pago: {
+                        numeroTarjeta: '',
+                        fechaVencimiento: '',
+                        cvv: '',
+                        nombreTarjeta: ''
+                    },
+                    paises: ["Argentina", "Brasil", "Chile", "Colombia"], // Datos de ejemplo, cargar desde JSON
+                    aeropuertos: ["Ezeiza", "Aeroparque", "Córdoba", "Rosario"], // Datos de ejemplo, cargar desde JSON
+                    validaciones: {
+                        nombre: false,
+                        pasaporte: false,
+                        fechaNacimiento: false,
+                        ciudad: false,
+                        fechaRegreso: false,
+                        tarjeta: false
+                    },
+                    mensajesError: {
+                        nombre: '',
+                        pasaporte: '',
+                        fechaNacimiento: '',
+                        ciudad: 'La ciudad de origen y destino deben ser diferentes',
+                        fechaRegreso: 'La fecha de regreso debe ser posterior a la de salida',
+                        tarjeta: 'Número de tarjeta inválido'
+                    }
+                };
+            },
+            computed: {
+                formularioValido() {
+                    return Object.values(this.validaciones).every(Boolean);
+                }
+            },
+            methods: {
+                submitForm() {
+                    alert('Formulario enviado correctamente!');
+                },
+                validateNombre() {
+                    this.validaciones.nombre = /^[a-zA-Z\s]{3,}$/.test(this.pasajero.nombre);
+                    this.mensajesError.nombre = this.validaciones.nombre ? '' : 'Nombre no válido';
+                },
+                validatePasaporte() {
+                    this.validaciones.pasaporte = /^[a-zA-Z]{3}[0-9]{6}$/.test(this.pasajero.pasaporte);
+                    this.mensajesError.pasaporte = this.validaciones.pasaporte ? '' : 'Pasaporte no válido';
+                },
+                validateFechaNacimiento() {
+                    const fechaNacimiento = this.pasajero.fechaNacimiento;
+                    const regexFecha = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+                    if (!regexFecha.test(fechaNacimiento)) {
+                        this.validaciones.fechaNacimiento = false;
+                        this.mensajesError.fechaNacimiento = 'Formato de fecha inválido (dd/mm/yyyy)';
+                        return;
+                    }
+
+                    const [_, dia, mes, año] = fechaNacimiento.match(regexFecha);
+                    const fechaNacimientoDate = new Date(`${año}-${mes}-${dia}`);
+                    const fechaActual = new Date();
+
+                    // Calcula la diferencia de años
+                    let edad = fechaActual.getFullYear() - fechaNacimientoDate.getFullYear();
+                    const mesDiferencia = fechaActual.getMonth() - fechaNacimientoDate.getMonth();
+
+                    // Ajusta la edad si el cumpleaños no ha ocurrido en el año actual
+                    if (mesDiferencia < 0 || (mesDiferencia === 0 && fechaActual.getDate() < fechaNacimientoDate.getDate())) {
+                        edad--;
+                    }
+
+                    // Valida si tiene al menos 18 años
+                    if (edad >= 18) {
+                        this.validaciones.fechaNacimiento = true;
+                        this.mensajesError.fechaNacimiento = '';
+                    } else {
+                        this.validaciones.fechaNacimiento = false;
+                        this.mensajesError.fechaNacimiento = 'Debes tener al menos 18 años';
+                    }
+                },
+
+                validateCiudad() {
+                    this.validaciones.ciudad = this.vuelo.origen !== this.vuelo.destino;
+                },
+                validateFechaSalida() {
+                    // Validación de fecha de salida
+                },
+                validateFechaRegreso() {
+                    // Validación de fecha de regreso posterior a salida
+                },
+                validateTarjeta() {
+                    this.validaciones.tarjeta = /^\d{16}$/.test(this.pago.numeroTarjeta);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
