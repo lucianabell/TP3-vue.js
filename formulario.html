@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reserva de Vuelo</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="formulario.css">
+</head>
+
+<body>
+    <div id="app">
+        <h1>Formulario de Reserva de Vuelo</h1>
+
+        <form @submit.prevent="submitForm" method="post">
+            <fieldset>
+                <legend>Datos del Pasajero</legend>
+                <label>
+                    Nombre Completo:
+                    <input type="text" v-model="pasajero.nombre" @input="validateNombre" />
+                    <span :class="{'error': !validaciones.nombre, 'success': validaciones.nombre}">
+                        {{ mensajesError.nombre }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Número de Pasaporte:
+                    <input type="text" v-model="pasajero.pasaporte" @input="validatePasaporte" />
+                    <span :class="{'error': !validaciones.pasaporte, 'success': validaciones.pasaporte}">
+                        {{ mensajesError.pasaporte }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Nacimiento:
+                    <input type="text" v-model="pasajero.fechaNacimiento" placeholder="dd/mm/yyyy"
+                        @input="validateFechaNacimiento" />
+                    <span :class="{'error': !validaciones.fechaNacimiento, 'success': validaciones.fechaNacimiento}">
+                        {{ mensajesError.fechaNacimiento }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Nacionalidad:
+                    <select v-model="pasajero.nacionalidad">
+                        <option disabled value="">Selecciona un país</option>
+                        <option v-for="pais in paises" :key="pais.iso2" :value="pais.nameES">{{ pais.nameES }}</option>
+                    </select>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos del Vuelo</legend>
+                <label>
+                    Ciudad de Origen:
+                    <select v-model="vuelo.origen" @change="validateCiudad">
+                        <option disabled value="">Selecciona una ciudad</option>
+                        <option v-for="aeropuerto in aeropuertos" :key="aeropuerto" :value="aeropuerto">{{ aeropuerto }}
+                        </option>
+                    </select>
+                </label>
+                <br>
+                <label>
+                    Ciudad de Destino:
+                    <select v-model="vuelo.destino" @change="validateCiudad">
+                        <option disabled value="">Selecciona una ciudad</option>
+                        <option v-for="aeropuerto in aeropuertos" :key="aeropuerto" :value="aeropuerto">{{ aeropuerto }}
+                        </option>
+                    </select>
+                    <span :class="{'error': !validaciones.ciudad, 'success': validaciones.ciudad}">
+                        {{ mensajesError.ciudad }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Salida:
+                    <input type="date" v-model="vuelo.fechaSalida" @input="validateFechaSalida" />
+                    <span :class="{'error': !validaciones.fechaSalida, 'success': validaciones.fechaSalida}">
+                        {{ mensajesError.fechaSalida }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Fecha de Regreso:
+                    <input type="date" v-model="vuelo.fechaRegreso" @input="validateFechaRegreso" />
+                    <span :class="{'error': !validaciones.fechaRegreso, 'success': validaciones.fechaRegreso}">
+                        {{ mensajesError.fechaRegreso }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Clase de Vuelo:
+                    <select v-model="vuelo.clase">
+                        <option disabled value="">Selecciona una clase</option>
+                        <option v-for="clase in clases" :key="clase" :value="clase">{{ clase }}</option>
+                    </select>
+                </label>
+                <br>
+                <label>
+                    Número de Boletos:
+                    <input type="number" v-model="vuelo.numeroBoletos" min="1" max="10" @input="validateBoletos" />
+                    <span :class="{'error': !validaciones.numeroBoletos, 'success': validaciones.numeroBoletos}">
+                        {{ mensajesError.numeroBoletos }}
+                    </span>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos de Pago</legend>
+                <label>
+                    Número de Tarjeta de Crédito:
+                    <input type="text" v-model="pago.numeroTarjeta" @input="validateTarjeta" />
+                    <span :class="{'error': !validaciones.tarjeta, 'success': validaciones.tarjeta}">
+                        {{ mensajesError.tarjeta }}
+                    </span>
+                </label>
+                <div v-if="pago.tipoTarjeta" class="tarjeta-imagen">
+                    <img :src="imagenesTarjetas[pago.tipoTarjeta]" :alt="pago.tipoTarjeta" />
+                </div>
+                <br>
+                <label>
+                    Fecha de Vencimiento:
+                    <input type="text" v-model="pago.fechaVencimiento" placeholder="MM/AA"
+                        @input="validateFechaVencimiento" />
+                    <span :class="{'error': !validaciones.fechaVencimiento, 'success': validaciones.fechaVencimiento}">
+                        {{ mensajesError.fechaVencimiento }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    CVV:
+                    <input type="text" v-model="pago.cvv" @input="validateCVV" />
+                    <span :class="{'error': !validaciones.cvv, 'success': validaciones.cvv}">
+                        {{ mensajesError.cvv }}
+                    </span>
+                </label>
+                <br>
+                <label>
+                    Nombre en la Tarjeta:
+                    <input type="text" v-model="pago.nombreTarjeta" @input="validateNombreTarjeta" />
+                    <span :class="{'error': !validaciones.nombreTarjeta, 'success': validaciones.nombreTarjeta}">
+                        {{ mensajesError.nombreTarjeta }}
+                    </span>
+                </label>
+            </fieldset>
+
+            <button type="submit" :disabled="!formularioValido">Reservar</button>
+            <p v-if="!formularioValido" class="error">Completa todos los campos correctamente para habilitar el botón
+            </p>
+        </form>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    pasajero: {
+                        nombre: '',
+                        pasaporte: '',
+                        fechaNacimiento: '',
+                        nacionalidad: ''
+                    },
+                    vuelo: {
+                        origen: '',
+                        destino: '',
+                        fechaSalida: '',
+                        fechaRegreso: '',
+                        numeroBoletos: 1
+                    },
+                    pago: {
+                        numeroTarjeta: '',
+                        fechaVencimiento: '',
+                        cvv: '',
+                        nombreTarjeta: ''
+                    },
+                    paises: [],
+                    clases: ["Ejecutiva", "Economica", "Primera Clase"],
+                    aeropuertos: [],
+                    validaciones: {
+                        nombre: false,
+                        pasaporte: false,
+                        fechaNacimiento: false,
+                        ciudad: false,
+                        fechaSalida: false,
+                        fechaRegreso: false,
+                        tarjeta: false,
+                        fechaVencimiento: false,
+                        cvv: false,
+                        nombreTarjeta: false,
+                        numeroBoletos: false
+                    },
+                    mensajesError: {
+                        nombre: '',
+                        pasaporte: '',
+                        fechaNacimiento: '',
+                        ciudad: 'La ciudad de origen y destino deben ser diferentes',
+                        fechaSalida: '',
+                        fechaRegreso: 'La fecha de regreso debe ser posterior a la de salida',
+                        tarjeta: 'Número de tarjeta inválido',
+                        fechaVencimiento: '',
+                        cvv: '',
+                        nombreTarjeta: '',
+                        numeroBoletos: 'El número de boletos debe estar entre 1 y 10'
+                    },
+                    imagenesTarjetas: {
+                        Visa: 'img/visa.png',
+                        Mastercard: 'img/mastercard.png',
+                        AmericanExpress: 'img/amex.png'
+                    }
+                };
+            },
+            computed: {
+                formularioValido() {
+                    return Object.values(this.validaciones).every(Boolean);
+                }
+            },
+            mounted() {
+                this.cargarPaises();
+                this.cargarAerolineas();
+            },
+            methods: {
+                submitForm() {
+                    /*
+                    Muestra un mensaje de alerta cuando se envía el formulario.
+                     */
+                    alert('Formulario enviado correctamente!');
+                },
+                validateNombre() {
+                    /*
+                    Valida el nombre del pasajero.
+                    El nombre debe contener al menos 3 caracteres, solo letras y espacios.
+                    */
+                    if (this.pasajero.nombre === '') {
+                        this.validaciones.nombre = false;
+                        this.mensajesError.nombre = 'Este campo es obligatorio';
+                    } else {
+                        this.validaciones.nombre = /^[a-zA-Z\s]{3,}$/.test(this.pasajero.nombre);
+                        this.mensajesError.nombre = this.validaciones.nombre ? '' : 'Nombre no válido';
+                    }
+                },
+                validatePasaporte() {
+                    /*
+                    Valida el número de pasaporte del pasajero.
+                    El pasaporte debe tener 3 letras seguidas de 6 números.
+                    */
+                    this.validaciones.pasaporte = /^[a-zA-Z]{3}[0-9]{6}$/.test(this.pasajero.pasaporte); // Expresión regular actualizada
+                    this.mensajesError.pasaporte = this.validaciones.pasaporte ? '' : 'Pasaporte no válido. Debe tener 3 letras seguidas de 6 números.';
+                },
+                validateFechaNacimiento() {
+                    /*
+                     Valida la fecha de nacimiento del pasajero.
+                     
+                     Este método verifica si la fecha de nacimiento ingresada está en el formato válido 'dd/mm/aaaa'
+                     y si el pasajero tiene al menos 18 años. Actualiza el estado de validación.
+                     y mensajes de error correspondientes.
+                     
+                     Si el formato de fecha es incorrecto, establece un mensaje de error indicando el formato no válido.
+                     Si el pasajero es menor de 18 años, establece un mensaje de error indicando que el
+                     el pasajero debe tener al menos 18 años.
+                     
+                     Actualizaciones:
+                     - `this.validaciones.fechaNacimiento`: Booleano que indica si la fecha de nacimiento es válida.
+                     - `this.mensajesError.fechaNacimiento`: Mensaje de error por fecha de nacimiento no válida.
+                     */
+                    const fechaNacimiento = this.pasajero.fechaNacimiento;
+                    const regexFecha = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+                    if (!regexFecha.test(fechaNacimiento)) {
+                        this.validaciones.fechaNacimiento = false;
+                        this.mensajesError.fechaNacimiento = 'Formato de fecha inválido (dd/mm/yyyy)';
+                        return;
+                    }
+
+                    const [_, dia, mes, año] = fechaNacimiento.match(regexFecha);
+                    const fechaNacimientoDate = new Date(`${año}-${mes}-${dia}`);
+                    const fechaActual = new Date();
+
+                    // Calcula la diferencia de años
+                    let edad = fechaActual.getFullYear() - fechaNacimientoDate.getFullYear();
+                    const mesDiferencia = fechaActual.getMonth() - fechaNacimientoDate.getMonth();
+
+                    // Ajusta la edad si el cumpleaños no ha ocurrido en el año actual
+                    if (mesDiferencia < 0 || (mesDiferencia === 0 && fechaActual.getDate() < fechaNacimientoDate.getDate())) {
+                        edad--;
+                    }
+
+                    // Valida si tiene al menos 18 años
+                    if (edad >= 18) {
+                        this.validaciones.fechaNacimiento = true;
+                        this.mensajesError.fechaNacimiento = '';
+                    } else {
+                        this.validaciones.fechaNacimiento = false;
+                        this.mensajesError.fechaNacimiento = 'Debes tener al menos 18 años';
+                    }
+                },
+                cargarPaises() {
+                    /*
+                     Carga los paises desde el archivo paises.json y los asocia a this.paises.
+                    */
+                    fetch("paises.json")
+                        .then(response => response.json())
+                        .then(data => {
+                            this.paises = data;
+                        })
+                        .catch(error => {
+                            console.error("Error al cargar los datos", error);
+                        });
+                },
+                cargarAerolineas() {
+                    /*
+                     Carga los aeropuertos desde el archivo aeropuertos.json y los asocia a this.aeropuertos.
+                      
+                     Este método utiliza la API Fetch para obtener los datos de aeropuertos desde un archivo
+                     JSON. Si la petición es exitosa, asocia los datos a this.aeropuertos. Si hay un error,
+                     registra el error en la consola.
+                     */
+                    fetch("aeropuertos.json")
+                        .then(response => response.json())
+                        .then(data => {
+                            this.aeropuertos = data;
+                        })
+                        .catch(error => {
+                            console.error("Error al cargar los datos", error);
+                        });
+                },
+                validateCiudad() {
+                    /*
+                     Valida la selección de ciudad para el vuelo.
+                     
+                     Este método comprueba si las ciudades de origen y destino del vuelo son diferentes.
+                     Si son iguales, establece el estado de validación en falso y proporciona un mensaje de error.
+                     Si son diferentes, establece el estado de validación en verdadero y borra cualquier mensaje de error.
+                     
+                     Actualizaciones:
+                     - `this.validaciones.ciudad`: Booleano que indica si la selección de ciudad es válida.
+                     - `this.mensajesError.ciudad`: Mensaje de error por selección de ciudad no válida.
+                     */
+                    this.validaciones.ciudad = this.vuelo.origen !== this.vuelo.destino;
+                    if (!this.validaciones.ciudad) {
+                        this.mensajesError.ciudad = 'La ciudad de origen y destino deben ser diferentes';
+                    } else {
+                        this.mensajesError.ciudad = '';
+                    }
+                },
+
+                /*
+                 Valida la fecha de salida del vuelo.
+                 
+                 Compara la fecha de salida con la fecha actual y establece el estado de validación
+                 y el mensaje de error correspondiente.
+                 
+                 Si la fecha de salida es posterior a la fecha actual, establece el estado de validación
+                 en verdadero y borra cualquier mensaje de error.
+                 
+                 Si la fecha de salida es anterior a la fecha actual, establece el estado de validación
+                 en falso y proporciona un mensaje de error.
+                 
+                 Si ya hay una fecha de regreso, valida que sea posterior a la fecha de salida.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.fechaSalida`: Booleano que indica si la fecha de salida es válida.
+                 - `this.mensajesError.fechaSalida`: Mensaje de error por fecha de salida no válida.
+                */
+                validateFechaSalida() {
+                    const fechaSalida = new Date(this.vuelo.fechaSalida);
+                    const fechaActual = new Date();
+
+                    // Establece las horas a cero para una comparación precisa
+                    fechaSalida.setHours(0, 0, 0, 0);
+                    fechaActual.setHours(0, 0, 0, 0);
+
+                    if (fechaSalida > fechaActual) {
+                        this.validaciones.fechaSalida = true;
+                        this.mensajesError.fechaSalida = '';
+                    } else {
+                        this.validaciones.fechaSalida = false;
+                        this.mensajesError.fechaSalida = 'La fecha de salida debe ser posterior a la fecha actual';
+                    }
+
+                    // Si ya hay una fecha de regreso, valida que sea posterior a la fecha de salida
+                    if (this.vuelo.fechaRegreso) {
+                        this.validateFechaRegreso();
+                    }
+                },
+
+                /*
+                 Valida la fecha de regreso del vuelo.
+                 
+                 Comprueba si la fecha de regreso es posterior a la fecha de salida.
+                 
+                 Si la fecha de regreso es posterior a la fecha de salida, establece el estado de validación
+                 en verdadero y borra cualquier mensaje de error.
+                 
+                 Si la fecha de regreso es anterior a la fecha de salida, establece el estado de validación
+                 en falso y proporciona un mensaje de error.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.fechaRegreso`: Booleano que indica si la fecha de regreso es válida.
+                 - `this.mensajesError.fechaRegreso`: Mensaje de error por fecha de regreso no válida.
+                */
+                validateFechaRegreso() {
+                    if (!this.vuelo.fechaSalida) {
+                        this.validaciones.fechaRegreso = false;
+                        this.mensajesError.fechaRegreso = 'Selecciona primero la fecha de salida';
+                        return;
+                    }
+
+                    const fechaSalida = new Date(this.vuelo.fechaSalida);
+                    const fechaRegreso = new Date(this.vuelo.fechaRegreso);
+
+                    // Establece las horas a cero para una comparación precisa
+                    fechaSalida.setHours(0, 0, 0, 0);
+                    fechaRegreso.setHours(0, 0, 0, 0);
+
+                    if (fechaRegreso > fechaSalida) {
+                        this.validaciones.fechaRegreso = true;
+                        this.mensajesError.fechaRegreso = '';
+                    } else {
+                        this.validaciones.fechaRegreso = false;
+                        this.mensajesError.fechaRegreso = 'La fecha de regreso debe ser posterior a la fecha de salida';
+                    }
+                },
+                
+                /*
+                 Valida el número de boletos.
+                 
+                 Comprueba si el número de boletos ingresado está entre 1 y 10.
+                 
+                 Si el número de boletos está dentro del rango, establece el estado de validación
+                 en verdadero.
+                 
+                 Si el número de boletos está fuera del rango, establece el estado de validación
+                 en falso.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.numeroBoletos`: Booleano que indica si el número de boletos es válido.
+                */
+                validateBoletos() {
+                    if (this.vuelo.numeroBoletos >= 1 && this.vuelo.numeroBoletos <= 10) {
+                        this.validaciones.numeroBoletos = true;
+                    } else {
+                        this.validaciones.numeroBoletos = false;
+                    }
+                },
+                
+                /*
+                 Valida el número de tarjeta de crédito.
+                 
+                 Comprueba si el número de tarjeta de crédito es válido según las
+                 reglas de Visa, Mastercard y AmericanExpress.
+                 
+                 Si el número de tarjeta es válido, establece el estado de validación
+                 en verdadero y coloca el tipo de tarjeta en `this.pago.tipoTarjeta`.
+                 
+                 Si el número de tarjeta no es válido, establece el estado de validación
+                 en falso y coloca el mensaje de error en `this.mensajesError.tarjeta`.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.tarjeta`: Booleano que indica si el número de
+                   tarjeta es válido.
+                 - `this.mensajesError.tarjeta`: String con el mensaje de error
+                   correspondiente.
+                 - `this.pago.tipoTarjeta`: String con el tipo de tarjeta
+                   correspondiente.
+                */
+                validateTarjeta() {
+
+                    const numero = this.pago.numeroTarjeta.replace(/\s+/g, ''); // Elimina espacios
+                    const visaRegex = /^4[0-9]{12}(?:[0-9]{3})?$/; // Visa: empieza con 4, 13 o 16 dígitos
+                    const mastercardRegex = /^5[1-5][0-9]{14}$/; // Mastercard: empieza con 51-55, 16 dígitos
+                    const amexRegex = /^3[47][0-9]{13}$/; // Amex: empieza con 34 o 37, 15 dígitos
+
+                    if (visaRegex.test(numero)) {
+                        this.pago.tipoTarjeta = 'Visa';
+                        this.validaciones.tarjeta = true;
+                        this.mensajesError.tarjeta = '';
+                    } else if (mastercardRegex.test(numero)) {
+                        this.pago.tipoTarjeta = 'Mastercard';
+                        this.validaciones.tarjeta = true;
+                        this.mensajesError.tarjeta = '';
+                    } else if (amexRegex.test(numero)) {
+                        this.pago.tipoTarjeta = 'AmericanExpress';
+                        this.validaciones.tarjeta = true;
+                        this.mensajesError.tarjeta = '';
+                    } else {
+                        this.pago.tipoTarjeta = '';
+                        this.validaciones.tarjeta = false;
+                        this.mensajesError.tarjeta = 'Número de tarjeta inválido';
+                    }
+                },
+
+                /*
+                 Valida la fecha de vencimiento de la tarjeta.
+                  
+                 Este método verifica si la fecha de vencimiento ingresada
+                 está en el formato válido 'MM/AA' y si la fecha de vencimiento
+                 es posterior a la fecha actual. Actualiza el estado de
+                 validación y mensajes de error correspondientes.
+                  
+                 Si el formato de fecha es incorrecto, establece un mensaje de
+                 error indicando el formato no válido.
+                 Si la fecha de vencimiento es anterior a la fecha actual,
+                 establece un mensaje de error indicando que la fecha de
+                 vencimiento debe estar en el futuro.
+                  
+                 Actualizaciones:
+                 - `this.validaciones.fechaVencimiento`: Booleano que indica
+                    si la fecha de vencimiento es válida.
+                 - `this.mensajesError.fechaVencimiento`: String con el
+                    mensaje de error correspondiente.
+                 */
+                validateFechaVencimiento() {
+                    const fechaVencimiento = this.pago.fechaVencimiento;
+                    const regexFecha = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+
+                    if (!regexFecha.test(fechaVencimiento)) {
+                        this.validaciones.fechaVencimiento = false;
+                        this.mensajesError.fechaVencimiento = 'Formato inválido (MM/AA)';
+                        return;
+                    }
+
+                    const [_, mes, año] = fechaVencimiento.match(regexFecha);
+                    const fechaActual = new Date();
+                    const añoActual = fechaActual.getFullYear() % 100; // Últimos dos dígitos del año
+                    const mesActual = fechaActual.getMonth() + 1; // Enero es 0
+
+                    if (parseInt(año) > añoActual || (parseInt(año) === añoActual && parseInt(mes) >= mesActual)) {
+                        this.validaciones.fechaVencimiento = true;
+                        this.mensajesError.fechaVencimiento = '';
+                    } else {
+                        this.validaciones.fechaVencimiento = false;
+                        this.mensajesError.fechaVencimiento = 'La fecha de vencimiento debe estar en el futuro';
+                    }
+                },
+                
+                /*
+                 Valida el número de verificación de la tarjeta (CVV).
+                 El CVV debe tener entre 3 y 4 dígitos.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.cvv`: Booleano que indica si el CVV es válido.
+                 - `this.mensajesError.cvv`: String con el mensaje de error
+                   correspondiente.
+                 */
+                validateCVV() {
+                    this.validaciones.cvv = /^[0-9]{3,4}$/.test(this.pago.cvv);
+                    this.mensajesError.cvv = this.validaciones.cvv ? '' : 'CVV inválido';
+                },
+                
+                /*
+                 Valida el nombre en la tarjeta.
+                 
+                 Este método verifica si el nombre en la tarjeta ingresado
+                 contiene solo letras y espacios. Actualiza el estado de
+                 validación y mensajes de error correspondientes.
+                 
+                 Si el nombre en la tarjeta es inválido, establece un mensaje
+                 de error indicando que el nombre en la tarjeta es inválido.
+                 
+                 Actualizaciones:
+                 - `this.validaciones.nombreTarjeta`: Booleano que indica si
+                    el nombre en la tarjeta es válido.
+                 - `this.mensajesError.nombreTarjeta`: String con el mensaje
+                   de error correspondiente.
+                 */
+                validateNombreTarjeta() {
+                    this.validaciones.nombreTarjeta = /^[a-zA-Z\s]+$/.test(this.pago.nombreTarjeta);
+                    this.mensajesError.nombreTarjeta = this.validaciones.nombreTarjeta ? '' : 'Nombre en la tarjeta inválido';
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
