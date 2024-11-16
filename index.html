@@ -147,13 +147,8 @@
                     </div>
                     <div class="col-md-4">
                         <label for="clase" class="form-label form-label-sm">Clase</label>
-                        <select 
-                            class="form-select form-select-sm" 
-                            id="clase" 
-                            v-model="vuelo.clase"
-                            v-bind:class="getClass('clase')"
-                            @change="validateClase"
-                        >
+                        <select class="form-select form-select-sm" id="clase" v-model="vuelo.clase"
+                            v-bind:class="getClass('clase')" @change="validateClase">
                             <option value="">Selecciona una clase</option>
                             <option v-for="clase in clases" :key="clase" :value="clase">
                                 {{ clase }}
@@ -162,25 +157,24 @@
                         <div v-bind:class="getClassFeedback('clase')">
                             {{ mensajesError.clase }}
                         </div>
+                        <div class="my-3">
+                            <h5>Precio Total: ${{ precioTotal }}</h5>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <label for="numeroBoletos" class="form-label form-label-sm">N° Boletos</label>
                         <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-start px-3 fw-bold " @click="decrementarBoletos"
-                            > -  </button>
-                            <input 
-                                type="number" 
-                                id="numeroBoletos"
-                                class="form-control form-control-sm text-center" 
-                                style="width: 50px;"
-                                v-model="vuelo.numeroBoletos"
-                                @keypress="validarNumero" 
-                                @input="validateBoletos"
-                            />
-                            <button type="button" class="btn btn-sm px-3 btn-outline-secondary rounded-end fw-bold" @click="incrementarBoletos"
-                            > + </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-start px-3 fw-bold "
+                                @click="decrementarBoletos"> - </button>
+                            <input type="number" id="numeroBoletos" class="form-control form-control-sm text-center"
+                                style="width: 50px;" v-model="vuelo.numeroBoletos" @keypress="validarNumero"
+                                @input="validateBoletos" />
+                            <button type="button" class="btn btn-sm px-3 btn-outline-secondary rounded-end fw-bold"
+                                @click="incrementarBoletos"> + </button>
                         </div>
-                        <small class="d-block mt-1" v-bind:class="!validaciones.numeroBoletos ? 'text-danger' : 'text-success'">{{ mensajesError.numeroBoletos }}</small>
+                        <small class="d-block mt-1"
+                            v-bind:class="!validaciones.numeroBoletos ? 'text-danger' : 'text-success'">{{
+                            mensajesError.numeroBoletos }}</small>
                     </div>
                 </fieldset>
 
@@ -190,32 +184,25 @@
                         <label for="numeroTarjeta" class="form-label">
                             Número de Tarjeta de Crédito
                         </label>
-                        <input 
-                            type="number" 
-                            id="numeroTarjeta" 
-                            class="form-control form-control-sm" 
-                            placeholder="0000 0000 0000 0000"
-                            v-model="pago.numeroTarjeta" 
-                            @keypress="validarNumero" 
-                            @input="validateTarjeta"
-                            v-bind:class="getClass('numeroTarjeta')"
-                        />
+                        <input type="number" id="numeroTarjeta" class="form-control form-control-sm"
+                            placeholder="0000 0000 0000 0000" v-model="pago.numeroTarjeta" @keypress="validarNumero"
+                            @input="validateTarjeta" v-bind:class="getClass('numeroTarjeta')" />
                         <div v-if="pago.tipoTarjeta" class="tarjetas-imagen">
                             <img :src="imagenesTarjetas[pago.tipoTarjeta]" :alt="pago.tipoTarjeta" />
                         </div>
-                    
+
                         <div v-bind:class="getClassFeedback('numeroTarjeta')">
                             {{ mensajesError.numeroTarjeta }}
                         </div>
                     </div>
-                    
+
 
 
                     <div class="col-md-4">
                         <label for="vencimiento" class="form-label form-label-sm">Fecha de Vencimiento</label>
                         <input type="text" id="vencimiento" class="form-control form-control-sm"
-                            v-bind:class="getClass('fechaVencimiento')"
-                            v-model="pago.fechaVencimiento" placeholder="mm/aa" @input="validateFechaVencimiento" />
+                            v-bind:class="getClass('fechaVencimiento')" v-model="pago.fechaVencimiento"
+                            placeholder="mm/aa" @input="validateFechaVencimiento" />
                         <div v-bind:class="getClassFeedback('fechaVencimiento')">
                             {{ mensajesError.fechaVencimiento }}
                         </div>
@@ -223,31 +210,59 @@
                     </div>
                     <div class="col-md-3">
                         <label for="cvv" class="form-label form-label-sm">CVV</label>
-                        <input type="text" id="cvv" class="form-control form-control-sm"
-                            v-bind:class="getClass('cvv')" placeholder="xxx"
-                            v-model="pago.cvv" @input="validateCVV" />
+                        <input type="text" id="cvv" class="form-control form-control-sm" v-bind:class="getClass('cvv')"
+                            placeholder="xxx" v-model="pago.cvv" @input="validateCVV" />
                         <div v-bind:class="getClassFeedback('cvv')">
                             {{ mensajesError.cvv }}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label for="titular">Nombre del Titular</label>
-                        <input type="text" id="titular" class="form-control form-control-sm" 
-                            v-bind:class="getClass('titular')"
-                        v-model="pago.titular"
-                            @input="validateTitular" />
+                        <input type="text" id="titular" class="form-control form-control-sm"
+                            v-bind:class="getClass('titular')" v-model="pago.titular" @input="validateTitular" />
                         <div v-bind:class="getClassFeedback('titular')">
                             {{ mensajesError.titular }}
                         </div>
                     </div>
                 </fieldset>
-
+                <!-- Botón para mostrar el resumen -->
                 <div class="row d-flex justify-content-end mb-4 mt-3">
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 200px;">Reservar</button>
-                </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#resumenModal">
+                            Mostrar Resumen
+                        </button>
+                    </div>
+                    <div class="col-auto ms-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            Reservar
+                        </button>
+                    </div>
+                </div>                
             </form>
         </section>
+
+        <!-- Modal de resumen -->
+        <div class="modal fade" id="resumenModal" tabindex="-1" aria-labelledby="resumenModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resumenModalLabel">Resumen de Reserva</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Pasajero:</strong> {{ pasajero.nombre }}</p>
+                        <p><strong>Vuelo:</strong> De {{ vuelo.origen }} a {{ vuelo.destino }}</p>
+                        <p><strong>Clase:</strong> {{ vuelo.clase }}</p>
+                        <p><strong>Boletos:</strong> {{ vuelo.numeroBoletos }}</p>
+                        <p><strong>Total:</strong> ${{ precioTotal }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <script src="js/vue.js"></script>
 </body>

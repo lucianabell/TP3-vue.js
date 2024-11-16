@@ -33,7 +33,7 @@ createApp({
             paises: [],
             clases: ["Ejecutiva", "Economica", "Primera Clase"],
             aeropuertos: [],
-
+            mostrarModal: false,
             validaciones: {
                 nombre: null,
                 pasaporte: null,
@@ -73,6 +73,23 @@ createApp({
         /* formularioValido() {
             return Object.values(this.validaciones).every(Boolean);
         }, */
+        
+        /**
+        Calcula el precio total del vuelo en función de la clase seleccionada y el número de billetes.
+        El precio base está determinado por la clase de vuelo: 'Economica', 'Ejecutiva' o 'Primera Clase'.
+        Si no se selecciona ninguna clase, el precio base por defecto es 0.
+    
+        @returns {number} El precio total calculado como el precio base multiplicado por la cantidad de boletos.
+        */
+        precioTotal() {
+            const preciosPorClase = {
+                'Economica': 10000,
+                'Ejecutiva': 40000,
+                'Primera Clase': 100000,
+            };
+            const precioBase = preciosPorClase[this.vuelo.clase] || 0;
+            return precioBase * this.vuelo.numeroBoletos;
+        }
     },
     mounted() {
         this.cargarPaises();
@@ -102,6 +119,15 @@ createApp({
                 });
         },
 
+        /**
+         * Devuelve un objeto con las clases CSS para el campo especificado en 
+         * "field". El objeto tiene dos propiedades: "is-invalid" y "is-valid". La 
+         * primera se utiliza cuando el campo no es válido y la segunda cuando es 
+         * válido.
+         * 
+         * @param {string} field - El nombre del campo a validar.
+         * @returns {object} Un objeto con las clases CSS para el campo.
+         */
         getClass(field) {
             return {
                 'is-invalid': this.validaciones[field] === false,
@@ -109,6 +135,16 @@ createApp({
             };
         },
 
+        /**
+         * Devuelve un objeto con las clases CSS para el feedback del campo
+         * especificado en "field". El objeto tiene dos propiedades:
+         * "invalid-feedback" y "valid-feedback". La primera se utiliza cuando
+         * el campo no es válido y la segunda cuando es válido.
+         * 
+         * @param {string} field - El nombre del campo a validar.
+         * @returns {object} Un objeto con las clases CSS para el feedback del
+         * campo.
+         */
         getClassFeedback(field) {
             return {
                 'invalid-feedback': this.validaciones[field] === false,
@@ -252,6 +288,13 @@ createApp({
 
         },
 
+        /**
+         * Valida la nacionalidad del pasajero.
+         * 
+         * Si la nacionalidad no ha sido seleccionada, establece un mensaje de error
+         * y actualiza el estado de validación.
+         * 
+         */
         validateNacionalidad() {
             if (this.pasajero.nacionalidad === "") {
                 this.validaciones.nacionalidad = false;
@@ -262,6 +305,15 @@ createApp({
             this.validaciones.nacionalidad = true;
             this.mensajesError.nacionalidad = "";
         },
+        
+        /**
+         * Valida la ciudad de origen o destino del vuelo.
+         * 
+         * Verifica si la ciudad de origen o destino ha sido seleccionada y si
+         * la ciudad de origen es diferente a la ciudad de destino.
+         * 
+         * @param {string} field - Campo a validar, puede ser "origen" o "destino".
+         */
         validateCiudad(field) {
 
             if (this.vuelo[field] === "") {
@@ -281,6 +333,14 @@ createApp({
         },
 
 
+        /**
+         * Valida la fecha de salida o regreso del vuelo.
+         * 
+         * Verifica si la fecha de salida o regreso es posterior a la fecha actual
+         * y si la fecha de regreso es posterior a la fecha de salida.
+         * 
+         * @param {string} field - Campo a validar, puede ser "fechaSalida" o "fechaRegreso".
+         */
         validateFecha(field) {
             const fecha = new Date(this.vuelo[field]);
             const fechaActual = new Date();
@@ -316,6 +376,14 @@ createApp({
             this.validaciones[field] = true;
             this.mensajesError[field] = "¡Perfecto!";
         },
+
+        
+        /**
+         * Valida el número de boletos ingresado por el usuario.
+         * Debe ser un número entre 1 y 10.
+         * 
+         * @returns {void}
+         */
         validateBoletos() {
             let boletos = parseInt(this.vuelo.numeroBoletos, 10);
 
@@ -336,6 +404,13 @@ createApp({
             this.mensajesError.numeroBoletos = "";
         },
 
+        /**
+         * Decrementa el número de boletos ingresado por el usuario.
+         * Si el valor actual es NaN o es mayor que 1, decrementa el valor en 1.
+         * Si el valor actual es mayor que 10, muestra el mensaje de error "Máximo: 10 boletos".
+         * 
+         * @returns {void}
+         */
         decrementarBoletos() {
             let boletos = parseInt(this.vuelo.numeroBoletos, 10);
 
@@ -349,6 +424,13 @@ createApp({
             }
         },
 
+        /**
+         * Incrementa el número de boletos ingresado por el usuario.
+         * Si el valor actual es NaN, lo establece en 1.
+         * Si el valor actual es menor que 10, incrementa el valor en 1.
+         * 
+         * @returns {void}
+         */
         incrementarBoletos() {
             let boletos = parseInt(this.vuelo.numeroBoletos, 10);
 
@@ -362,7 +444,13 @@ createApp({
 
             this.mensajesError.numeroBoletos = "";
         },
-
+   
+        /**
+         * Valida la clase seleccionada por el usuario.
+         * Debe ser una clase diferente a "".
+         * 
+         * @returns {void}
+         */
         validateClase() {
             if (this.vuelo.clase === "") {
                 this.validaciones.clase = false;
@@ -374,6 +462,23 @@ createApp({
         },
 
 
+        /**
+         * Valida el número de tarjeta de crédito ingresado por el usuario.
+         * 
+         * Este método verifica el formato del número de tarjeta y determina su tipo
+         * (Visa, MasterCard, American Express) basándose en expresiones regulares.
+         * 
+         * Actualiza el estado de validación y mensajes de error correspondientes.
+         * 
+         * Si el número de tarjeta es vacío, se establece un mensaje de error indicando
+         * que debe tener 15 o 16 dígitos. Si el formato es incorrecto, se establece un
+         * mensaje de error indicando que el formato de la tarjeta es inválido.
+         * 
+         * Actualizaciones:
+         * - `this.pago.tipoTarjeta`: String que representa el tipo de tarjeta (Visa, MasterCard, AmericanExpress).
+         * - `this.validaciones.numeroTarjeta`: Booleano que indica si el número de tarjeta es válido.
+         * - `this.mensajesError.numeroTarjeta`: String con el mensaje de error correspondiente.
+         */
         validateTarjeta() {
             const numero = this.pago.numeroTarjeta;
     
@@ -419,27 +524,27 @@ createApp({
                 event.preventDefault();
             }
         },
-
-      /*
-               Valida la fecha de vencimiento de la tarjeta.
-                
-               Este método verifica si la fecha de vencimiento ingresada
-               está en el formato válido 'MM/AA' y si la fecha de vencimiento
-               es posterior a la fecha actual. Actualiza el estado de
-               validación y mensajes de error correspondientes.
-                
-               Si el formato de fecha es incorrecto, establece un mensaje de
-               error indicando el formato no válido.
-               Si la fecha de vencimiento es anterior a la fecha actual,
-               establece un mensaje de error indicando que la fecha de
-               vencimiento debe estar en el futuro.
-                
-               Actualizaciones:
-               - `this.validaciones.fechaVencimiento`: Booleano que indica
-                  si la fecha de vencimiento es válida.
-               - `this.mensajesError.fechaVencimiento`: String con el
-                  mensaje de error correspondiente.
-               */
+    
+        /**
+         * Valida la fecha de vencimiento de la tarjeta.
+         *
+         * Este método verifica si la fecha de vencimiento ingresada
+         * está en el formato válido 'MM/AA' y si la fecha de vencimiento
+         * es posterior a la fecha actual. Actualiza el estado de
+         * validación y mensajes de error correspondientes.
+         *
+         * Si el formato de fecha es incorrecto, establece un mensaje de
+         * error indicando el formato no válido.
+         * Si la fecha de vencimiento es anterior a la fecha actual,
+         * establece un mensaje de error indicando que la fecha de
+         * vencimiento debe estar en el futuro.
+         *
+         * Actualizaciones:
+         * - `this.validaciones.fechaVencimiento`: Booleano que indica
+         *    si la fecha de vencimiento es válida.
+         * - `this.mensajesError.fechaVencimiento`: String con el
+         *    mensaje de error correspondiente.
+         */
         validateFechaVencimiento() {
             const fechaVencimiento = this.pago.fechaVencimiento;
             const regexFecha = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
@@ -510,6 +615,13 @@ createApp({
             this.mensajesError.titular= this.validaciones.nombreTarjeta
                 ? ""
                 : "Nombre en la tarjeta inválido";
+        },
+
+        abrirModal() {
+            this.mostrarModal = true;
+        },
+        cerrarModal() {
+            this.mostrarModal = false;
         },
     },
 }).mount("#app");
