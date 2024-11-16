@@ -34,6 +34,7 @@ createApp({
             clases: ["Ejecutiva", "Economica", "Primera Clase"],
             aeropuertos: [],
             mostrarModal: false,
+
             validaciones: {
                 nombre: null,
                 pasaporte: null,
@@ -50,6 +51,7 @@ createApp({
                 cvv: null,
                 titular: null,
             },
+            mensajeErrorGlobal: "Deshabilitado hasta que todos los campos estén completos y validados correctamente",
             mensajesError: {
                 nombre: "",
                 pasaporte: "",
@@ -70,10 +72,18 @@ createApp({
         };
     },
     computed: {
-        /* formularioValido() {
-            return Object.values(this.validaciones).every(Boolean);
-        }, */
-        
+        formularioValido() {
+            console.log(this.validaciones);
+            // Si el viaje es "Solo ida", no validamos fechaRegreso
+            const validFechaRegreso = this.vuelo.tipoViaje === "2" ? this.validaciones.fechaRegreso : true;
+
+            // Verifica si todos los campos son válidos
+            return (
+                Object.values(this.validaciones).every((value) => value === true) &&
+                validFechaRegreso
+            );
+        },
+
         /**
         Calcula el precio total del vuelo en función de la clase seleccionada y el número de billetes.
         El precio base está determinado por la clase de vuelo: 'Economica', 'Ejecutiva' o 'Primera Clase'.
@@ -151,31 +161,31 @@ createApp({
                 'valid-feedback': this.validaciones[field] === true,
             };
         },
-/* 
-        submitForm(event) {
-
-            event.preventDefault();
-
-            let fechaSalida = this.validateFecha('fechaSalida');
-            let fechaRegreso = this.vuelo.tipoViaje === '2' ? this.validateFecha('fechaRegreso') : true;
-
-            const esValido =
-                this.validateNombre() &&
-                this.validatePasaporte() &&
-                this.validateFechaNacimiento() &&
-                this.validateNacionalidad() &&
-                this.validateCiudad('origen') &&
-                this.validateCiudad('destino') &&
-                fechaSalida && fechaRegreso &&
-                this.validateTarjeta() &&
-                this.validateFechaVencimiento() &&
-                this.validateCVV() &&
-                this.validateNombreTarjeta() &&
-                this.validateNumeroBoletos();
-
-          
-        },
- */
+        /* 
+                submitForm(event) {
+        
+                    event.preventDefault();
+        
+                    let fechaSalida = this.validateFecha('fechaSalida');
+                    let fechaRegreso = this.vuelo.tipoViaje === '2' ? this.validateFecha('fechaRegreso') : true;
+        
+                    const esValido =
+                        this.validateNombre() &&
+                        this.validatePasaporte() &&
+                        this.validateFechaNacimiento() &&
+                        this.validateNacionalidad() &&
+                        this.validateCiudad('origen') &&
+                        this.validateCiudad('destino') &&
+                        fechaSalida && fechaRegreso &&
+                        this.validateTarjeta() &&
+                        this.validateFechaVencimiento() &&
+                        this.validateCVV() &&
+                        this.validateNombreTarjeta() &&
+                        this.validateNumeroBoletos();
+        
+                  
+                },
+         */
         validateNombre() {
             let regex = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/;
             let nombre = this.pasajero.nombre.trim();
@@ -305,7 +315,7 @@ createApp({
             this.validaciones.nacionalidad = true;
             this.mensajesError.nacionalidad = "";
         },
-        
+
         /**
          * Valida la ciudad de origen o destino del vuelo.
          * 
@@ -349,6 +359,13 @@ createApp({
             fecha.setHours(0, 0, 0, 0);
             fechaActual.setHours(0, 0, 0, 0);
 
+            if (field === "fechaRegreso" && this.vuelo.tipoViaje === "1") {
+                // Si es viaje de ida, no es necesario validar fechaRegreso
+                this.validaciones.fechaRegreso = true;
+                this.mensajesError.fechaRegreso = "";
+                return;
+            }
+
             if (fecha < fechaActual) {
                 this.validaciones[field] = false;
                 this.mensajesError[field] =
@@ -359,25 +376,21 @@ createApp({
             }
 
             if (field === "fechaRegreso" && this.vuelo.fechaRegreso) {
-                const fechaRegreso = new Date(this.vuelo.fechaRegreso);
-                fechaRegreso.setHours(0, 0, 0, 0);
-
-                if (fechaRegreso < fecha) {
+                const fechaSalida = new Date(this.vuelo.fechaSalida);
+                if (fecha < fechaSalida) {
                     this.validaciones.fechaRegreso = false;
                     this.mensajesError.fechaRegreso =
                         "La fecha de regreso debe ser posterior a la fecha de salida.";
-                } else {
-                    this.validaciones.fechaRegreso = true;
-                    this.mensajesError.fechaRegreso = "¡Perfecto!";
+                    return;
                 }
             }
 
-            // Marca como válida la fecha actual
             this.validaciones[field] = true;
             this.mensajesError[field] = "¡Perfecto!";
         },
 
-        
+
+
         /**
          * Valida el número de boletos ingresado por el usuario.
          * Debe ser un número entre 1 y 10.
@@ -411,40 +424,30 @@ createApp({
          * 
          * @returns {void}
          */
-        decrementarBoletos() {
-            let boletos = parseInt(this.vuelo.numeroBoletos, 10);
-
-            if (isNaN(boletos)) {
-                this.vuelo.numeroBoletos = 1;
-            }
-
-            if (boletos > 1) {
-                this.vuelo.numeroBoletos = boletos - 1;
-                this.mensajesError.numeroBoletos = boletos > 11 ? "Máximo: 10 boletos" : "";
-            }
-        },
-
-        /**
-         * Incrementa el número de boletos ingresado por el usuario.
-         * Si el valor actual es NaN, lo establece en 1.
-         * Si el valor actual es menor que 10, incrementa el valor en 1.
-         * 
-         * @returns {void}
-         */
         incrementarBoletos() {
             let boletos = parseInt(this.vuelo.numeroBoletos, 10);
 
             if (isNaN(boletos)) {
                 this.vuelo.numeroBoletos = 1;
-            }
-
-            if (boletos < 10) {
+            } else if (boletos < 10) {
                 this.vuelo.numeroBoletos = boletos + 1;
             }
 
-            this.mensajesError.numeroBoletos = "";
+            this.validateBoletos(); // Valida después del cambio
         },
-   
+
+        decrementarBoletos() {
+            let boletos = parseInt(this.vuelo.numeroBoletos, 10);
+
+            if (isNaN(boletos)) {
+                this.vuelo.numeroBoletos = 1;
+            } else if (boletos > 1) {
+                this.vuelo.numeroBoletos = boletos - 1;
+            }
+
+            this.validateBoletos(); // Valida después del cambio
+        },
+
         /**
          * Valida la clase seleccionada por el usuario.
          * Debe ser una clase diferente a "".
@@ -481,36 +484,36 @@ createApp({
          */
         validateTarjeta() {
             const numero = this.pago.numeroTarjeta;
-    
+
             if (numero === "") {
                 this.pago.tipoTarjeta = '';
                 this.validaciones.numeroTarjeta = false;
                 this.mensajesError.numeroTarjeta = 'Debe tener 15 o 16 dígitos.';
                 return;
             }
-            
-    
+
+
             // Expresiones regulares para las tarjetas
             const visaRegex = /^4\d{15}$/;  // Visa: 16 dígitos que comienzan con 4
             const masterCardRegex = /^5\d{15}$/;  // MasterCard: 16 dígitos que comienzan con 5
             const amexRegex = /^(34|37)\d{13}$/; // American Express: 15 dígitos que comienzan con 34 o 37
-    
+
             if (visaRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'Visa';
                 this.validaciones.numeroTarjeta = true;
-                this.mensajesError.numeroTarjeta = ''; 
+                this.mensajesError.numeroTarjeta = '';
                 return;
-            }else if (masterCardRegex.test(numero)) {
+            } else if (masterCardRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'Mastercard';
                 this.validaciones.numeroTarjeta = true;
                 this.mensajesError.numeroTarjeta = '';
                 return;
-            }else if (amexRegex.test(numero)) {
+            } else if (amexRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'AmericanExpress';
                 this.validaciones.numeroTarjeta = true;
                 this.mensajesError.numeroTarjeta = '';
                 return;
-            }else{
+            } else {
                 this.pago.tipoTarjeta = '';
                 this.validaciones.numeroTarjeta = false;
                 this.mensajesError.numeroTarjeta = 'Formato de tarjeta inválido.';
@@ -524,7 +527,7 @@ createApp({
                 event.preventDefault();
             }
         },
-    
+
         /**
          * Valida la fecha de vencimiento de la tarjeta.
          *
@@ -606,13 +609,13 @@ createApp({
                - `this.mensajesError.nombreTarjeta`: String con el mensaje
                  de error correspondiente.
                */
-        validateNombreTarjeta() {
+        validateTitular() {
 
             ///ver
             this.validaciones.titular = /^[a-zA-Z\s]+$/.test(
                 this.pago.titular
             );
-            this.mensajesError.titular= this.validaciones.nombreTarjeta
+            this.mensajesError.titular = this.validaciones.nombreTarjeta
                 ? ""
                 : "Nombre en la tarjeta inválido";
         },

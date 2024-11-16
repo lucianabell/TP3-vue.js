@@ -157,9 +157,7 @@
                         <div v-bind:class="getClassFeedback('clase')">
                             {{ mensajesError.clase }}
                         </div>
-                        <div class="my-3">
-                            <h5>Precio Total: ${{ precioTotal }}</h5>
-                        </div>
+
                     </div>
                     <div class="col-md-4">
                         <label for="numeroBoletos" class="form-label form-label-sm">N° Boletos</label>
@@ -175,6 +173,9 @@
                         <small class="d-block mt-1"
                             v-bind:class="!validaciones.numeroBoletos ? 'text-danger' : 'text-success'">{{
                             mensajesError.numeroBoletos }}</small>
+                        <div class="my-3">
+                            <h5>Precio Total: ${{ precioTotal }}</h5>
+                        </div>
                     </div>
                 </fieldset>
 
@@ -227,17 +228,22 @@
                 </fieldset>
                 <!-- Botón para mostrar el resumen -->
                 <div class="row d-flex justify-content-end mb-4 mt-3">
+                    <!-- Mensaje de error global -->
+                    <div v-if="!formularioValido" class="text-danger text-center mb-2">
+                        {{ mensajeErrorGlobal }}
+                    </div>
                     <div class="col-auto">
-                        <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#resumenModal">
+                        <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal"
+                            data-bs-target="#resumenModal">
                             Mostrar Resumen
                         </button>
                     </div>
                     <div class="col-auto ms-2">
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100" :disabled="!formularioValido">
                             Reservar
                         </button>
                     </div>
-                </div>                
+                </div>
             </form>
         </section>
 
