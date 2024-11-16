@@ -85,19 +85,20 @@
                     <div class="col-md-12">
                         <div class="form-check form-check-inline">
                             <input type="radio" name="tipoViaje" id="ida" v-model="vuelo.tipoViaje"
-                                class="form-check-input" value="1" checked>
+                                class="form-check-input" value="1" @change="handleTipoViajeChange">
                             <label class="form-check-label " for="ida">
                                 Solo ida
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input v-model="vuelo.tipoViaje" value="2" class="form-check-input" type="radio"
-                                name="tipoViaje" id="idaVuelta">
+                                name="tipoViaje" id="idaVuelta" @change="handleTipoViajeChange">
                             <label class="form-check-label" for="idaVuelta">
                                 Ida y vuelta
                             </label>
                         </div>
                     </div>
+
 
                     <div class="col-md-6">
                         <label for="origen" class="form-label form-label-sm">Ciudad de Origen</label>

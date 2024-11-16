@@ -16,7 +16,7 @@ createApp({
                 fechaSalida: "",
                 fechaRegreso: null,
                 clase: "",
-                numeroBoletos: 1,
+                numeroBoletos: 0,
             },
             pago: {
                 numeroTarjeta: '',
@@ -74,10 +74,10 @@ createApp({
     computed: {
         formularioValido() {
             console.log(this.validaciones);
-            // Si el viaje es "Solo ida", no validamos fechaRegreso
+            // Si el viaje es "Solo ida", ignora fechaRegreso
             const validFechaRegreso = this.vuelo.tipoViaje === "2" ? this.validaciones.fechaRegreso : true;
-
-            // Verifica si todos los campos son válidos
+    
+            // Valida todos los campos y la fecha de regreso si aplica
             return (
                 Object.values(this.validaciones).every((value) => value === true) &&
                 validFechaRegreso
@@ -342,6 +342,18 @@ createApp({
             this.mensajesError[field] = "";
         },
 
+        /**
+         * Maneja el cambio en el tipo de viaje (ida o ida y vuelta).
+         * Si el tipo de viaje es "Solo ida", limpia la fecha de regreso y la marca como válida.
+         */
+        handleTipoViajeChange() {
+            if (this.vuelo.tipoViaje === "1") {
+                // Limpia la fecha de regreso y marca como válida
+                this.vuelo.fechaRegreso = null;
+                this.validaciones.fechaRegreso = true;
+                this.mensajesError.fechaRegreso = "";
+            }
+        },
 
         /**
          * Valida la fecha de salida o regreso del vuelo.
@@ -352,20 +364,21 @@ createApp({
          * @param {string} field - Campo a validar, puede ser "fechaSalida" o "fechaRegreso".
          */
         validateFecha(field) {
-            const fecha = new Date(this.vuelo[field]);
-            const fechaActual = new Date();
-
-            // Normaliza las horas para comparar solo las fechas
-            fecha.setHours(0, 0, 0, 0);
-            fechaActual.setHours(0, 0, 0, 0);
-
+            // Si el campo es fechaRegreso y es un viaje de ida, limpia el valor y marca como válido
             if (field === "fechaRegreso" && this.vuelo.tipoViaje === "1") {
-                // Si es viaje de ida, no es necesario validar fechaRegreso
-                this.validaciones.fechaRegreso = true;
+                this.vuelo.fechaRegreso = null; // Limpia el valor
+                this.validaciones.fechaRegreso = true; // Marca como válido automáticamente
                 this.mensajesError.fechaRegreso = "";
                 return;
             }
-
+        
+            const fecha = new Date(this.vuelo[field]);
+            const fechaActual = new Date();
+        
+            // Normaliza las horas para comparar solo las fechas
+            fecha.setHours(0, 0, 0, 0);
+            fechaActual.setHours(0, 0, 0, 0);
+        
             if (fecha < fechaActual) {
                 this.validaciones[field] = false;
                 this.mensajesError[field] =
@@ -374,7 +387,7 @@ createApp({
                         : "La fecha de regreso debe ser posterior a la fecha de salida.";
                 return;
             }
-
+        
             if (field === "fechaRegreso" && this.vuelo.fechaRegreso) {
                 const fechaSalida = new Date(this.vuelo.fechaSalida);
                 if (fecha < fechaSalida) {
@@ -384,13 +397,11 @@ createApp({
                     return;
                 }
             }
-
+        
             this.validaciones[field] = true;
             this.mensajesError[field] = "¡Perfecto!";
         },
-
-
-
+        
         /**
          * Valida el número de boletos ingresado por el usuario.
          * Debe ser un número entre 1 y 10.
