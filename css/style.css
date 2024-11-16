@@ -1,0 +1,145 @@
+body {
+    background-color: #f8f8f8 !important;
+    margin: 0;
+    padding: 0;
+    
+}
+
+form {
+    max-width: 800px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+
+legend {
+    font-size: 1rem !important;
+    font-weight: 600;
+}
+
+ #tarjeta > .tarjetas-imagen{
+    display: block;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+ }
+
+.tarjetas-imagen img{
+    max-width: 35px;
+}
+#tarjeta{
+    position: relative;
+}
+/* 
+form h2,h1 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #4A90E2;  
+    margin-bottom: 20px;
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 1em;
+    background-color: #fff;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #4A90E2; 
+    outline: none;  
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-top: 15px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #4A90E2;  
+    color: white;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #357ABD;  
+}
+
+.error {
+    color: #ff4d4d;  
+    font-size: 0.9em;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.field-container {
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 0.95em;
+    }
+
+    button[type="submit"] {
+        font-size: 1em;
+    }
+}
+
+
+.tarjeta-imagen {
+    text-align: left; 
+    margin-top: 20px;
+}
+
+.tarjeta-imagen img {
+    max-width: 64px; 
+    height: auto; 
+    border: 2px solid #ddd;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
+}
+
+.tarjeta-imagen img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+.success {
+    color: green;
+    font-size: 0.9em;
+} */
