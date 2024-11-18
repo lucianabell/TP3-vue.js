@@ -90,7 +90,7 @@ createApp({
             };
 
             const precioBase = preciosPorClase[this.vuelo.clase] || 0;
-            if (this.validaciones.clase && this.validaciones.fechaSalida && this.validaciones.origen && this.validaciones.destino) {
+            if (this.validaciones.clase && this.validaciones.fechaSalida && this.validaciones.origen && this.validaciones.destino && this.validaciones.numeroBoletos) {
 
                 if (this.vuelo.fechaRegreso && this.validaciones.fechaRegreso) {
                     return precioBase * this.vuelo.numeroBoletos * 2;
@@ -349,6 +349,13 @@ createApp({
             let anio = parseInt(partesFecha[2]);
             let fecha = new Date(anio, mes - 1, dia);
             fecha.setHours(0, 0, 0, 0); 
+
+
+            if (fecha.getMonth() + 1 !== mes ) {
+                this.validaciones[field] = false;
+                this.mensajesError[field] = 'Fecha inválida. Revisa el día, mes y año.';
+                return;
+            }
 
             let fechaActual = new Date();
             fechaActual.setHours(0, 0, 0, 0);
