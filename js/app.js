@@ -10,11 +10,11 @@ createApp({
                 nacionalidad: "",
             },
             vuelo: {
-                tipoViaje: "",
+                tipoViaje: "1",
                 origen: "",
                 destino: "",
                 fechaSalida: "",
-                fechaRegreso: null,
+                fechaRegreso: "",
                 clase: "",
                 numeroBoletos: 1,
             },
@@ -34,8 +34,6 @@ createApp({
             paises: [],
             clases: ["Ejecutiva", "Economica", "Primera Clase"],
             aeropuertos: [],
-            mostrarModal: false,
-
             validaciones: {
                 nombre: null,
                 pasaporte: null,
@@ -52,7 +50,6 @@ createApp({
                 cvv: null,
                 titular: null,
             },
-            mensajeErrorGlobal: "Deshabilitado hasta que todos los campos estén completos y validados correctamente",
             mensajesError: {
                 nombre: "",
                 pasaporte: "",
@@ -69,37 +66,39 @@ createApp({
                 cvv: "",
                 titular: "",
             },
+            confirmacion: false,
 
         };
     },
     computed: {
-        formularioValido() {
-            /* console.log(this.validaciones); */
-            // Si el viaje es "Solo ida", ignora fechaRegreso
-            const validFechaRegreso = this.vuelo.tipoViaje === "2" ? this.validaciones.fechaRegreso : true;
-
-            // Valida todos los campos y la fecha de regreso si aplica
+        /* Verifica si el formulario es válido. */
+        isFormValid() {
+            this.validaciones.fechaRegreso = this.vuelo.tipoViaje === "2" ? this.validaciones.fechaRegreso : true;
             return (
-                Object.values(this.validaciones).every((value) => value === true) &&
-                validFechaRegreso
+                Object.values(this.validaciones)
+                    .filter((value) => value !== null)
+                    .every((value) => value === true)
             );
         },
 
-        /**
-        Calcula el precio total del vuelo en función de la clase seleccionada y el número de billetes.
-        El precio base está determinado por la clase de vuelo: 'Economica', 'Ejecutiva' o 'Primera Clase'.
-        Si no se selecciona ninguna clase, el precio base por defecto es 0.
-    
-        @returns {number} El precio total calculado como el precio base multiplicado por la cantidad de boletos.
-        */
+        /* Calcula el precio total del vuelo en función de la clase seleccionada y el número de boletos. */
         precioTotal() {
             const preciosPorClase = {
                 'Economica': 10000,
                 'Ejecutiva': 40000,
                 'Primera Clase': 100000,
             };
+
             const precioBase = preciosPorClase[this.vuelo.clase] || 0;
-            return precioBase * this.vuelo.numeroBoletos;
+            if (this.validaciones.clase && this.validaciones.fechaSalida && this.validaciones.origen && this.validaciones.destino) {
+
+                if (this.vuelo.fechaRegreso && this.validaciones.fechaRegreso) {
+                    return precioBase * this.vuelo.numeroBoletos * 2;
+                }
+                return precioBase * this.vuelo.numeroBoletos;
+            }
+
+            return 0;
         }
     },
     mounted() {
@@ -108,6 +107,39 @@ createApp({
     },
 
     methods: {
+        submitForm(event) {
+            event.preventDefault();
+            //valida cada campo
+            this.validateNombre('nombre');
+            this.validatePasaporte();
+            this.validateFechaNacimiento();
+            this.validateNacionalidad();
+            this.validateCiudad('origen');
+            this.validateCiudad('destino');
+            this.validateClase();
+            this.validateTarjeta();
+            this.validateFechaVencimiento();
+            this.validateCVV();
+            this.validateBoletos();
+            this.validateNombre('titular');
+            this.validateFechaVuelo('fechaSalida');
+            if (this.vuelo.tipoViaje === "2") {
+                this.validateFechaVuelo('fechaRegreso');
+            }
+
+            if (this.isFormValid) {
+                //si no hay errores, muestra la confirmacion
+                this.confirmacion = true;
+            }
+        },
+
+
+        mostrarBtnModal() {
+            // Verifica que todos los campos sean validos, si son validos muestra el btn ver resumen 
+            this.validaciones.fechaRegreso = this.vuelo.tipoViaje === "2" ? this.validaciones.fechaRegreso : true;
+            const resultado = Object.values(this.validaciones).every((value) => value === true);
+            return resultado;
+        },
 
         cargarPaises() {
             fetch("data/paises.json")
@@ -130,15 +162,7 @@ createApp({
                 });
         },
 
-        /**
-         * Devuelve un objeto con las clases CSS para el campo especificado en 
-         * "field". El objeto tiene dos propiedades: "is-invalid" y "is-valid". La 
-         * primera se utiliza cuando el campo no es válido y la segunda cuando es 
-         * válido.
-         * 
-         * @param {string} field - El nombre del campo a validar.
-         * @returns {object} Un objeto con las clases CSS para el campo.
-         */
+        /* Coloca la clase is-invalid o is-valid en inputs o selects */
         getClass(field) {
             return {
                 'is-invalid': this.validaciones[field] === false,
@@ -146,15 +170,8 @@ createApp({
             };
         },
 
-        /**
-         * Devuelve un objeto con las clases CSS para el feedback del campo
-         * especificado en "field". El objeto tiene dos propiedades:
-         * "invalid-feedback" y "valid-feedback". La primera se utiliza cuando
-         * el campo no es válido y la segunda cuando es válido.
-         * 
-         * @param {string} field - El nombre del campo a validar.
-         * @returns {object} Un objeto con las clases CSS para el feedback del
-         * campo.
+        /* Coloca la clase invalid-feedback para mostrar el mensaje de error y la 
+        clase valid-feedback para mostrar el mensaje de éxito.
          */
         getClassFeedback(field) {
             return {
@@ -162,61 +179,44 @@ createApp({
                 'valid-feedback': this.validaciones[field] === true,
             };
         },
-        /* 
-                submitForm(event) {
-        
-                    event.preventDefault();
-        
-                    let fechaSalida = this.validateFecha('fechaSalida');
-                    let fechaRegreso = this.vuelo.tipoViaje === '2' ? this.validateFecha('fechaRegreso') : true;
-        
-                    const esValido =
-                        this.validateNombre() &&
-                        this.validatePasaporte() &&
-                        this.validateFechaNacimiento() &&
-                        this.validateNacionalidad() &&
-                        this.validateCiudad('origen') &&
-                        this.validateCiudad('destino') &&
-                        fechaSalida && fechaRegreso &&
-                        this.validateTarjeta() &&
-                        this.validateFechaVencimiento() &&
-                        this.validateCVV() &&
-                        this.validateNombreTarjeta() &&
-                        this.validateNumeroBoletos();
-        
-                  
-                },
-         */
 
-        validateNombre() {
+
+        validateNombre(field) {
             let regex = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/;
-            let nombre = this.pasajero.nombre.trim();
 
-            if (nombre.length === 0) {
-                this.validaciones.nombre = false;
-                this.mensajesError.nombre = 'Campo obligatorio.';
+            let nombre = field === 'nombre' ? this.pasajero[field].trim() : this.pago[field].trim();
+
+            if (nombre === '') {
+                this.validaciones[field] = false;
+                this.mensajesError[field] = 'Campo obligatorio.';
                 return;
             }
 
             if (!regex.test(nombre)) {
-                this.validaciones.nombre = false;
-                this.mensajesError.nombre = 'El nombre solo puede contener letras y espacios.';
+                this.validaciones[field] = false;
+                this.mensajesError[field] = 'El nombre solo puede contener letras y espacios.';
                 return;
             }
 
             if (nombre.length < 3) {
-                this.validaciones.nombre = false;
-                this.mensajesError.nombre = 'El nombre debe tener al menos 3 caracteres.';
+                this.validaciones[field] = false;
+                this.mensajesError[field] = 'El nombre debe tener al menos 3 caracteres.';
                 return;
             }
 
-            this.mensajeExito('nombre', '¡Correcto!');
+            this.mensajeExito(field, '');
         },
 
         validatePasaporte() {
             /*Valida el número de pasaporte del pasajero. El pasaporte debe tener 3 letras seguidas de 6 números.*/
-            let pasaporte = this.pasajero.pasaporte.trim();
+            let pasaporte = this.pasajero.pasaporte;
             let regex = /^[a-zA-Z]{3}[0-9]{6}$/;
+
+            if (pasaporte == '') {
+                this.validaciones.pasaporte = false;
+                this.mensajesError.pasaporte = 'Campo obligatorio.';
+                return;
+            }
 
             if (!regex.test(pasaporte)) {
                 this.validaciones.pasaporte = false;
@@ -224,14 +224,14 @@ createApp({
                 return;
             }
 
-            this.mensajeExito('pasaporte', '¡Correcto!');
+            this.mensajeExito('pasaporte', '');
         },
 
         validateFechaNacimiento() {
             let regexFecha = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
             let fechaNacimiento = this.pasajero.fechaNacimiento.trim();
 
-            if (fechaNacimiento.length === 0) {
+            if (fechaNacimiento === '') {
                 this.validaciones.fechaNacimiento = false;
                 this.mensajesError.fechaNacimiento = 'Campo obligatorio.';
                 return;
@@ -239,58 +239,47 @@ createApp({
 
             if (!regexFecha.test(fechaNacimiento)) {
                 this.validaciones.fechaNacimiento = false;
-                this.mensajesError.fechaNacimiento = 'Ingresa una fecha válida.';
+                this.mensajesError.fechaNacimiento = 'Ingresa una fecha válida (dd/mm/aaaa).';
                 return;
             }
 
             let partesFecha = fechaNacimiento.split('/');
             let dia = parseInt(partesFecha[0]);
-            let mes = parseInt(partesFecha[1]);
+            let mes = parseInt(partesFecha[1]) - 1; // Los meses en JavaScript empiezan en 0
             let anio = parseInt(partesFecha[2]);
 
+            let fecha = new Date(anio, mes, dia);
 
-            if (anio < 1900) {
+            // Validar si la fecha es válida
+            if (fecha.getDate() !== dia || fecha.getMonth() !== mes || fecha.getFullYear() !== anio) {
+                this.validaciones.fechaNacimiento = false;
+                this.mensajesError.fechaNacimiento = 'Fecha inválida. Revisa el día, mes y año.';
+                return;
+            }
+
+            let fechaActual = new Date();
+            let edad = fechaActual.getFullYear() - anio;
+
+
+            if (fechaActual.getMonth() < mes || (fechaActual.getMonth() === mes && fechaActual.getDate() < dia)) {
+                edad--;
+            }
+
+            if (edad < 18) {
+                this.validaciones.fechaNacimiento = false;
+                this.mensajesError.fechaNacimiento = 'Debe ser mayor de 18 años.';
+                return;
+            }
+
+            if (edad > 110) {
                 this.validaciones.fechaNacimiento = false;
                 this.mensajesError.fechaNacimiento = 'Ingresa una fecha válida.';
                 return;
             }
 
-            let fechaActual = new Date();
-            let fechaNacimientoObj = new Date(anio, mes - 1, dia);
-
-            if (fechaNacimientoObj > fechaActual) {
-                this.validaciones.fechaNacimiento = false;
-                this.mensajesError.fechaNacimiento = 'La fecha de nacimiento no puede ser en el futuro.';
-                return;
-            }
-
-            
-            /* 
-            let fechaNacimiento = new Date(this.pasajero.fechaNacimiento);
-            let fechaActual = new Date();
-
-            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-
-            let mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
-
-            if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
-
-            if (isNaN(fechaNacimiento.getTime()) || edad > 110) {
-                this.validaciones.fechaNacimiento = false;
-                this.mensajesError.fechaNacimiento = "Ingresa una fecha válida.";
-                return;
-            }
-
-            if (edad < 18) {
-                this.validaciones.fechaNacimiento = false;
-                this.mensajesError.fechaNacimiento = "Debes tener al menos 18 años.";
-                return;
-            } */
-
             this.mensajeExito('fechaNacimiento', '¡Correcto!');
         },
+
 
         validateNacionalidad() {
 
@@ -309,9 +298,13 @@ createApp({
          *  Segun el tipo de viaje se establece el estado de validación y mensajes de error correspondientes para la fecha de regreso.
          */
         checkTipoViaje() {
-            this.validaciones.fechaRegreso == this.vuelo.tipoViaje === "2" ? null : true;
-            this.vuelo.fechaRegreso = null;
+            this.validaciones.fechaRegreso == this.vuelo.tipoViaje == "2" ? null : true;
+            this.vuelo.fechaRegreso = '';
             this.mensajesError.fechaRegreso = "";
+
+            if (this.vuelo.tipoViaje == "2") {
+                this.validateFechaVuelo('fechaRegreso');
+            }
         },
 
 
@@ -329,63 +322,89 @@ createApp({
                 return;
             }
 
-            this.mensajeExito(field, '¡Correcto!');
+            this.mensajeExito(field, '');
         },
 
+        validateFechaVuelo(field) {
+            // Expresión regular para validar el formato dd/mm/aaaa
+            let regexFecha = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+            let fechaVuelo = this.vuelo[field].trim();
 
-        validateFecha(field) {
-
-            let fecha = new Date(this.vuelo[field]);
-
-            if (isNaN(fecha.getTime())) {
+            if (fechaVuelo.length === 0) {
                 this.validaciones[field] = false;
-                this.mensajesError[field] = "Ingresa una fecha válida.";
+                this.mensajesError[field] = 'Campo obligatorio.';
                 return;
             }
 
+            if (!regexFecha.test(fechaVuelo)) {
+                this.validaciones[field] = false;
+                this.mensajesError[field] = 'Ingresa una fecha válida (dd/mm/aaaa).';
+                return;
+            }
+
+            // Convertir la fecha de vuelo a un objeto Date
+            let partesFecha = fechaVuelo.split('/');
+            let dia = parseInt(partesFecha[0]);
+            let mes = parseInt(partesFecha[1]);
+            let anio = parseInt(partesFecha[2]);
+            let fecha = new Date(anio, mes - 1, dia);
+            fecha.setHours(0, 0, 0, 0); 
+
             let fechaActual = new Date();
-            let anoDespues = new Date();
-
-            anoDespues.setFullYear(anoDespues.getFullYear() + 1);
-
-            // Normaliza las horas para comparar solo las fechas
-            fecha.setHours(0, 0, 0, 0);
             fechaActual.setHours(0, 0, 0, 0);
 
             if (fecha < fechaActual) {
                 this.validaciones[field] = false;
-                this.mensajesError[field] =
-                    field === "fechaSalida"
-                        ? "La fecha de salida debe ser igual o posterior a la fecha actual."
-                        : "La fecha de regreso debe ser posterior a la fecha de salida.";
+                this.mensajesError[field] = field === "fechaSalida"
+                    ? "La fecha de salida debe ser igual o posterior a la fecha actual."
+                    : "La fecha de regreso debe ser posterior a la fecha de salida.";
                 return;
             }
 
-            if (fecha > anoDespues) {
+            let fechaLimite = new Date(fechaActual.getFullYear() + 1, fechaActual.getMonth(), fechaActual.getDate());
+            if (fecha > fechaLimite) {
                 this.validaciones[field] = false;
-                this.mensajesError[field] = 'La fecha debe estar dentro de los próximos 12 meses.';
+                this.mensajesError[field] = `Solo puedes reservar vuelos hasta el ${fechaLimite.getDate()}/${fechaLimite.getMonth() + 1}/${fechaLimite.getFullYear()}.`;
                 return;
             }
 
+            if (field === "fechaRegreso" && this.vuelo.fechaSalida) {
+                partesFecha = this.vuelo.fechaSalida.split('/');
+                dia = parseInt(partesFecha[0]);
+                mes = parseInt(partesFecha[1]);
+                anio = parseInt(partesFecha[2]);
+                let fechaSalida = new Date(anio, mes - 1, dia);
+                fechaSalida.setHours(0, 0, 0, 0);  
 
-            if (field === "fechaRegreso" && this.vuelo.fechaRegreso) {
-                let fechaSalida = new Date(this.vuelo.fechaSalida);
-                if (fecha < fechaSalida) {
-                    this.validaciones.fechaRegreso = false;
-                    this.mensajesError.fechaRegreso =
-                        "La fecha de regreso debe ser posterior a la fecha de salida.";
+                if (fecha <= fechaSalida) {
+                    this.validaciones[field] = false;
+                    this.mensajesError[field] = "La fecha de regreso debe ser posterior a la fecha de salida.";
                     return;
                 }
             }
 
+            if (field === "fechaSalida" && this.vuelo.fechaRegreso) {
+                partesFecha = this.vuelo.fechaRegreso.split('/');
+                dia = parseInt(partesFecha[0]);
+                mes = parseInt(partesFecha[1]);
+                anio = parseInt(partesFecha[2]);
+                let fechaRegreso = new Date(anio, mes - 1, dia);
+                fechaRegreso.setHours(0, 0, 0, 0); 
+
+                if (fecha >= fechaRegreso) {
+                    this.validaciones.fechaRegreso = false;
+                    this.mensajesError.fechaRegreso = "La fecha de regreso debe ser posterior a la fecha de salida.";
+                    this.mensajeExito(field, '¡Correcto!');
+
+                    return;
+                }else{
+                    this.mensajeExito('fechaRegreso', '¡Correcto!');
+                }
+            }
+
             this.mensajeExito(field, '¡Correcto!');
-        },
-
-        /**
-       * Valida la clase seleccionada por el usuario.
-       * Debe ser una clase diferente a "".
-       */
-
+        }
+        ,
         validateClase() {
             if (this.vuelo.clase === "") {
                 this.validaciones.clase = false;
@@ -393,7 +412,8 @@ createApp({
                 return;
             }
 
-            this.mensajeExito('clase', '¡Correcto!');
+            this.mensajeExito('clase', '');
+            this.validateBoletos();
         },
 
         /* Valida el numero de boletos ingresado por el usuario.
@@ -433,7 +453,7 @@ createApp({
             let boletos = parseInt(this.vuelo.numeroBoletos, 10);
 
             if (isNaN(boletos)) {
-                this.vuelo.numeroBoletos = 1;
+                return this.vuelo.numeroBoletos = 1;
             } else if (boletos > 1) {
                 this.vuelo.numeroBoletos = boletos - 1;
             }
@@ -444,10 +464,18 @@ createApp({
         validateTarjeta() {
             let numero = this.pago.numeroTarjeta;
 
-            if (numero === "") {
+            if (numero === '') {
                 this.pago.tipoTarjeta = 'Card';
                 this.validaciones.numeroTarjeta = false;
-                this.mensajesError.numeroTarjeta = 'Debe tener 15 o 16 dígitos.';
+                this.mensajesError.numeroTarjeta = 'Campo obligatorio.';
+                return;
+
+            }
+
+            if (numero.toString().length > 16) {
+                this.pago.tipoTarjeta = 'Card';
+                this.validaciones.numeroTarjeta = false;
+                this.mensajesError.numeroTarjeta = 'Debe tener al menos 16 dígitos.';
                 return;
             }
 
@@ -455,27 +483,30 @@ createApp({
             const masterCardRegex = /^5\d{15}$/;  // MasterCard: 16 dígitos que comienzan con 5
             const amexRegex = /^(34|37)\d{13}$/; // American Express: 15 dígitos que comienzan con 34 o 37
 
-            
             if (visaRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'Visa';
                 this.validaciones.numeroTarjeta = true;
                 this.mensajesError.numeroTarjeta = '';
+                this.validateCVV();
                 return;
             } else if (masterCardRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'Mastercard';
                 this.validaciones.numeroTarjeta = true;
                 this.mensajesError.numeroTarjeta = '';
+                this.validateCVV();
                 return;
             } else if (amexRegex.test(numero)) {
                 this.pago.tipoTarjeta = 'AmericanExpress';
                 this.validaciones.numeroTarjeta = true;
                 this.mensajesError.numeroTarjeta = '';
+                this.validateCVV();
                 return;
             } else {
                 this.pago.tipoTarjeta = 'Card';
                 this.validaciones.numeroTarjeta = false;
-                this.mensajesError.numeroTarjeta = 'Formato de tarjeta inválido.';
+                this.mensajesError.numeroTarjeta = 'Ingresa un número de tarjeta válido (Visa, Mastercard o AmericanExpress)';
             }
+
         },
 
         validarNumero(event) {
@@ -485,118 +516,72 @@ createApp({
             }
         },
 
-        validarFecha(event) {
+        keyPressFecha(event) {
             //permite solo numeros y /
             if (!/[0-9/]/.test(event.key)) {
                 event.preventDefault();
             }
         },
 
-        /**
-         * Valida la fecha de vencimiento de la tarjeta.
-         *
-         * Este método verifica si la fecha de vencimiento ingresada
-         * está en el formato válido 'MM/AA' y si la fecha de vencimiento
-         * es posterior a la fecha actual. Actualiza el estado de
-         * validación y mensajes de error correspondientes.
-         *
-         * Si el formato de fecha es incorrecto, establece un mensaje de
-         * error indicando el formato no válido.
-         * Si la fecha de vencimiento es anterior a la fecha actual,
-         * establece un mensaje de error indicando que la fecha de
-         * vencimiento debe estar en el futuro.
-         *
-         * Actualizaciones:
-         * - `this.validaciones.fechaVencimiento`: Booleano que indica
-         *    si la fecha de vencimiento es válida.
-         * - `this.mensajesError.fechaVencimiento`: String con el
-         *    mensaje de error correspondiente.
-         */
         validateFechaVencimiento() {
-            const fechaVencimiento = this.pago.fechaVencimiento;
-            const regexFecha = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+            let fechaVencimiento = this.pago.fechaVencimiento;
+            let regexFecha = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
 
             if (!regexFecha.test(fechaVencimiento)) {
                 this.validaciones.fechaVencimiento = false;
-                this.mensajesError.fechaVencimiento = "Formato inválido (MM/AA)";
+                this.mensajesError.fechaVencimiento = "Ingrese una fecha valida (mm/aa)";
                 return;
             }
 
-            const [_, mes, año] = fechaVencimiento.match(regexFecha);
-            const fechaActual = new Date();
-            const añoActual = fechaActual.getFullYear() % 100; // Últimos dos dígitos del año
-            const mesActual = fechaActual.getMonth() + 1; // Enero es 0
+            let partesFecha = fechaVencimiento.split('/');
+            let mes = parseInt(partesFecha[0]);
+            let anio = parseInt(partesFecha[1]);
 
-            if (
-                parseInt(año) > añoActual ||
-                (parseInt(año) === añoActual && parseInt(mes) >= mesActual)
+            let fechaActual = new Date();
+            let anioActual = fechaActual.getFullYear() % 100; // Últimos dos dígitos del año
+            let mesActual = fechaActual.getMonth() + 1;
+
+            if (anio < anioActual || (anio === anioActual && mes < mesActual || anio - anioActual > 10)
             ) {
-                this.validaciones.fechaVencimiento = true;
-                this.mensajesError.fechaVencimiento = "";
-            } else {
                 this.validaciones.fechaVencimiento = false;
                 this.mensajesError.fechaVencimiento =
-                    "La fecha de vencimiento debe estar en el futuro";
+                    "Ingrese una fecha valida (mm/aa)";
+                return;
             }
-        },
 
-        /*
-               Valida el número de verificación de la tarjeta (CVV).
-               El CVV debe tener entre 3 y 4 dígitos.
-               
-               Actualizaciones:
-               - `this.validaciones.cvv`: Booleano que indica si el CVV es válido.
-               - `this.mensajesError.cvv`: String con el mensaje de error
-                 correspondiente.
-               */
+            this.mensajeExito('fechaVencimiento', '¡Correcto!');
+
+        },
+        /* El CVV debe tener entre 3 y 4 dígitos */
         validateCVV() {
-            // falta tarjeta maerican 4 digitos las demas 3
-            this.validaciones.cvv = /^[0-9]{3,4}$/.test(this.pago.cvv);
-            this.mensajesError.cvv = this.validaciones.cvv
-                ? ""
-                : "CVV inválido";
-        },
+            let cvv = this.pago.cvv;
 
-        /*
-               Valida el nombre en la tarjeta.
-               
-               Este método verifica si el nombre en la tarjeta ingresado
-               contiene solo letras y espacios. Actualiza el estado de
-               validación y mensajes de error correspondientes.
-               
-               Si el nombre en la tarjeta es inválido, establece un mensaje
-               de error indicando que el nombre en la tarjeta es inválido.
-               
-               Actualizaciones:
-               - `this.validaciones.nombreTarjeta`: Booleano que indica si
-                  el nombre en la tarjeta es válido.
-               - `this.mensajesError.nombreTarjeta`: String con el mensaje
-                 de error correspondiente.
-               */
-        validateTitular() {
+            if ((this.pago.tipoTarjeta === 'Visa' || this.pago.tipoTarjeta === 'Mastercard') && !/^[0-9]{3}$/.test(cvv)) {
+                this.validaciones.cvv = false;
+                this.mensajesError.cvv = 'Debe tener 3 dígitos';
+                return;
+            } else if (this.pago.tipoTarjeta === 'AmericanExpress' && !/^[0-9]{4}$/.test(cvv)) {
+                this.validaciones.cvv = false;
+                this.mensajesError.cvv = 'Debe tener 4 dígitos';
+                return;
+            } else if ((this.pago.tipoTarjeta === 'Card' && !/^[0-9]{3,4}$/.test(cvv)) || (this.pago.tipoTarjeta === 'Card' && cvv === '')) {
+                this.validaciones.cvv = false;
+                this.mensajesError.cvv = 'Debe tener 3 o 4 dígitos';
+                return;
+            } else {
+                this.validaciones.cvv = true;
+                this.mensajesError.cvv = '';
+            }
 
-            ///ver
-            this.validaciones.titular = /^[a-zA-Z\s]+$/.test(
-                this.pago.titular
-            );
-            this.mensajesError.titular = this.validaciones.nombreTarjeta
-                ? ""
-                : "Nombre en la tarjeta inválido";
-        },
 
-        abrirModal() {
-            this.mostrarModal = true;
-        },
-        cerrarModal() {
-            this.mostrarModal = false;
         },
 
         mensajeExito(field, text) {
             this.validaciones[field] = true;
             this.mensajesError[field] = text;
-            setTimeout(() => {
+           /*  setTimeout(() => {
                 this.mensajesError[field] = "";
-            }, 5000);
+            }, 5000); */
         }
 
     },

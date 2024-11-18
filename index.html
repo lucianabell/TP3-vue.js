@@ -29,15 +29,15 @@
                 <img src="img/vuelo.png" alt="logo" class="d-block me-2" style="width: 40px;">
                 <h4 class="text-white">Reserva de Vuelos</h4>
             </div>
-
-            <form class="bg-white py-5 px-5 mx-auto">
+            <form class="bg-white py-5 px-5 mx-auto" ref="formReserva" v-show="!confirmacion">
                 <fieldset class="row g-3 border rounded pb-4 px-4 mb-3">
                     <legend class="float-none w-auto px-2">Datos del Pasajero</legend>
 
                     <div class="col-md-8">
                         <label for="nombre" class="form-label form-label-sm">Nombre Completo</label>
                         <input type="text" id="nombre" class="form-control form-control-sm"
-                            v-bind:class="getClass('nombre')" v-model="pasajero.nombre" @input="validateNombre" />
+                            v-bind:class="getClass('nombre')" v-model="pasajero.nombre"
+                            @input="validateNombre('nombre')" />
                         <div v-bind:class="getClassFeedback('nombre')">
                             {{ mensajesError.nombre }}
                         </div>
@@ -57,8 +57,7 @@
                         <input type="text" class="form-control form-control-sm"
                             v-bind:class="getClass('fechaNacimiento')" v-model="pasajero.fechaNacimiento"
                             @input="validateFechaNacimiento" id="fechaNacimiento" placeholder="dd/mm/aaaa"
-                            @keypress="validarFecha"
-                             />
+                            @keypress="keyPressFecha" />
                         <div v-bind:class="getClassFeedback('fechaNacimiento')">
                             {{ mensajesError.fechaNacimiento }}
                         </div>
@@ -87,7 +86,7 @@
                     <div class="col-md-12">
                         <div class="form-check form-check-inline">
                             <input type="radio" name="tipoViaje" id="ida" v-model="vuelo.tipoViaje"
-                                class="form-check-input" value="1" @change="checkTipoViaje">
+                                class="form-check-input" value="1" @change="checkTipoViaje" checked>
                             <label class="form-check-label " for="ida">
                                 Solo ida
                             </label>
@@ -101,7 +100,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-md-6" id="divOrigen">
                         <label for="origen" class="form-label form-label-sm">Origen</label>
                         <select class="form-select form-select-sm" id="origen" v-model="vuelo.origen"
@@ -112,8 +110,9 @@
                             </option>
                         </select>
 
-                        <div id="imgOrigen" >
-                            <img width="20" height="20" src="https://img.icons8.com/metro/26/airplane-take-off.png" alt="airplane-take-off"/> 
+                        <div id="imgOrigen">
+                            <img width="20" height="20" src="https://img.icons8.com/metro/26/airplane-take-off.png"
+                                alt="airplane-take-off" />
                         </div>
 
                         <div v-bind:class="getClassFeedback('origen')">
@@ -130,8 +129,9 @@
                                 {{ aeropuerto }}
                             </option>
                         </select>
-                        <div id="imgDestino" >
-                            <img width="20" height="20" src="https://img.icons8.com/metro/26/airplane-landing.png" alt="airplane-landing"/>
+                        <div id="imgDestino">
+                            <img width="20" height="20" src="https://img.icons8.com/metro/26/airplane-landing.png"
+                                alt="airplane-landing" />
                         </div>
                         <div v-bind:class="getClassFeedback('destino')">
                             {{ mensajesError.destino }}
@@ -139,9 +139,9 @@
                     </div>
                     <div class="col-md-3">
                         <label for="fechaSalida" class="form-label form-label-sm">Salida</label>
-                        <input type="date" class="form-control form-control-sm" v-bind:class="getClass('fechaSalida')"
-                            v-model="vuelo.fechaSalida" @input="validateFecha('fechaSalida')" id="fechaSalida"
-                            placeholder="DD/MM/AAAA" />
+                        <input type="text" class="form-control form-control-sm" v-bind:class="getClass('fechaSalida')"
+                            v-model="vuelo.fechaSalida" @input="validateFechaVuelo('fechaSalida')"
+                            @keypress="keyPressFecha" id="fechaSalida" placeholder="dd/mm/aaaa" />
                         <div v-bind:class="getClassFeedback('fechaSalida')">
                             {{ mensajesError.fechaSalida }}
                         </div>
@@ -149,9 +149,9 @@
 
                     <div class="col-md-3" v-if="vuelo.tipoViaje === '2'">
                         <label for="fechaRegreso" class="form-label form-label-sm">Regreso</label>
-                        <input type="date" class="form-control form-control-sm" v-model="vuelo.fechaRegreso"
-                            @input="validateFecha('fechaRegreso')" v-bind:class="getClass('fechaRegreso')"
-                            id="fechaRegreso" placeholder="DD/MM/AAAA" />
+                        <input type="text" class="form-control form-control-sm" v-model="vuelo.fechaRegreso"
+                            @input="validateFechaVuelo('fechaRegreso')" @keypress="keyPressFecha"
+                            v-bind:class="getClass('fechaRegreso')" id="fechaRegreso" placeholder="dd/mm/aaaa" />
                         <div v-bind:class="getClassFeedback('fechaRegreso')">
                             {{ mensajesError.fechaRegreso }}
                         </div>
@@ -173,21 +173,19 @@
                     <div class="col-md-2">
                         <label for="numeroBoletos" class="form-label form-label-sm">N° Boletos</label>
                         <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-sm fw-bold"
-                                @click="decrementarBoletos"> - </button>
+                            <button type="button" class="btn btn-sm fw-bold" @click="decrementarBoletos"> - </button>
                             <input type="number" id="numeroBoletos" class="form-control form-control-sm text-center"
-                                v-bind:class="getClass('numeroBoletos')"
-                                style="width: 50px;" v-model="vuelo.numeroBoletos" @keypress="validarNumero"
-                                @input="validateBoletos" />
-                            <button type="button" class="btn btn-sm fw-bold"
-                                @click="incrementarBoletos"> +</button>
+                                v-bind:class="getClass('numeroBoletos')" style="width: 50px;"
+                                v-model="vuelo.numeroBoletos" @keypress="validarNumero" @input="validateBoletos" />
+                            <button type="button" class="btn btn-sm fw-bold" @click="incrementarBoletos"> +</button>
                         </div>
                         <small class="d-block mt-1"
                             v-bind:class="!validaciones.numeroBoletos ? 'text-danger' : 'text-success'">{{
                             mensajesError.numeroBoletos }}</small>
-                        <div class="my-3">
-                            <h5>Precio Total: ${{ precioTotal }}</h5>
-                        </div>
+                    </div>
+
+                    <div v-if="precioTotal > 0" class="alert alert-light" role="alert">
+                        Precio Total: $ {{ precioTotal }}
                     </div>
                 </fieldset>
 
@@ -201,7 +199,8 @@
                             placeholder="0000 0000 0000 0000" v-model="pago.numeroTarjeta" @keypress="validarNumero"
                             @input="validateTarjeta" v-bind:class="getClass('numeroTarjeta')" />
                         <div v-if="pago.tipoTarjeta" class="tarjetas-imagen">
-                            <img :src="imagenesTarjetas[pago.tipoTarjeta]" :alt="pago.tipoTarjeta" width="30" height="30" />
+                            <img :src="imagenesTarjetas[pago.tipoTarjeta]" :alt="pago.tipoTarjeta" width="30"
+                                height="30" />
                         </div>
 
                         <div v-bind:class="getClassFeedback('numeroTarjeta')">
@@ -214,8 +213,7 @@
                         <label for="vencimiento" class="form-label form-label-sm">Vencimiento</label>
                         <input type="text" id="vencimiento" class="form-control form-control-sm"
                             v-bind:class="getClass('fechaVencimiento')" v-model="pago.fechaVencimiento"
-                            placeholder="mm/aa" @input="validateFechaVencimiento"
-                            @keypress="validarFecha" />
+                            placeholder="mm/aa" @input="validateFechaVencimiento" @keypress="keyPressFecha" />
                         <div v-bind:class="getClassFeedback('fechaVencimiento')">
                             {{ mensajesError.fechaVencimiento }}
                         </div>
@@ -226,7 +224,8 @@
                         <input type="text" id="cvv" class="form-control form-control-sm" v-bind:class="getClass('cvv')"
                             placeholder="xxx" v-model="pago.cvv" @input="validateCVV" />
                         <div id="imgCvv">
-                            <img width="30" height="30" src="https://img.icons8.com/ios/50/card-verification-value.png" alt="card-verification-value"/>
+                            <img width="30" height="30" src="https://img.icons8.com/ios/50/card-verification-value.png"
+                                alt="card-verification-value" />
                         </div>
                         <div v-bind:class="getClassFeedback('cvv')">
                             {{ mensajesError.cvv }}
@@ -235,47 +234,63 @@
                     <div class="col-md-6">
                         <label for="titular">Nombre del Titular</label>
                         <input type="text" id="titular" class="form-control form-control-sm"
-                            v-bind:class="getClass('titular')" v-model="pago.titular" @input="validateTitular" />
+                            v-bind:class="getClass('titular')" v-model="pago.titular"
+                            @input="validateNombre('titular')" />
                         <div v-bind:class="getClassFeedback('titular')">
                             {{ mensajesError.titular }}
                         </div>
                     </div>
                 </fieldset>
-                <!-- Botón para mostrar el resumen -->
-                <div class="row d-flex justify-content-end mb-4 mt-3">
-                    <!-- Mensaje de error global -->
-                    <div v-if="!formularioValido" class="text-danger text-center mb-2">
-                        {{ mensajeErrorGlobal }}
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal"
-                            data-bs-target="#resumenModal">
-                            Mostrar Resumen
-                        </button>
-                    </div>
-                    <div class="col-auto ms-2">
-                        <button type="submit" class="btn btn-primary w-100" :disabled="!formularioValido">
-                            Reservar
-                        </button>
-                    </div>
+                <div v-if="!isFormValid" class="row alert alert-danger text-center fs-6" role="alert">
+                    <small> ¡Ups, parece que olvidaste algo! Revisa los campos en rojo.</small>
+                </div>
+                <div class="row d-flex  justify-content-end mb-4 mt-3 ">
+                    <!-- Botón para mostrar el resumen -->
+                    <button type="button" v-show="mostrarBtnModal()" class="btn btn-secondary me-2" style="max-width: 200px" data-bs-toggle="modal" 
+                    data-bs-target="#resumenModal">
+                        Ver Resumen
+                    </button>
+                    
+                    <!-- Botón para confirmar la reserva -->
+                    <button type="submit" class="btn btn-primary" :disabled="!isFormValid" @click="submitForm" style="max-width: 250px">
+                        Confirmar Reserva
+                    </button>
                 </div>
             </form>
+
+            <article class="bg-white py-5 px-5 mx-auto" v-show="confirmacion">
+                <div class="mx-auto d-flex flex-column justify-content-center align-items-center">
+                    <img src="img/check.png" class="d-block mx-auto" style="max-width: 60px;" alt="">
+                    <h5 class="text-center mt-4 mb-4">Reserva Exitosa. ¡Gracias por elegirnos!</h5>
+                    <button type="button" class="btn btn-primary" ><a href="index.html" class="text-white text-decoration-none">Nueva Reserva</a></button>
+                </div>
+            </article>
         </section>
 
+
+        
+
         <!-- Modal de resumen -->
-        <div class="modal fade" id="resumenModal" tabindex="-1" aria-labelledby="resumenModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="resumenModal" class="modal fade" tabindex="-1" aria-labelledby="resumenModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="resumenModalLabel">Resumen de Reserva</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>Pasajero:</strong> {{ pasajero.nombre }}</p>
-                        <p><strong>Vuelo:</strong> De {{ vuelo.origen }} a {{ vuelo.destino }}</p>
-                        <p><strong>Clase:</strong> {{ vuelo.clase }}</p>
-                        <p><strong>Boletos:</strong> {{ vuelo.numeroBoletos }}</p>
-                        <p><strong>Total:</strong> ${{ precioTotal }}</p>
+                        <div class="px-2">
+                            <p>Pasajero: <strong>{{ pasajero.nombre }}</strong></p>
+                            <p>Pasaporte: <strong class="text-uppercase">{{ pasajero.pasaporte }}</strong></p>
+                            <p>Ciudad de Origen: <strong>{{ vuelo.origen }}</strong></p>
+                            <p>Ciudad de Destino: <strong>{{ vuelo.destino }}</strong></p>
+                            <p>Fecha de Salida: <strong>{{ vuelo.fechaSalida }}</strong></p>
+                            <p v-if="vuelo.tipoViaje === '2'">Fecha de Regreso: <strong>{{ vuelo.fechaRegreso }}</strong></p>
+                            <p>Clase: <strong>{{ vuelo.clase }}</strong></p>
+                            <p>Boletos: <strong>{{ vuelo.numeroBoletos }}</strong></p>
+                            <p>Medio de pago: <strong>Tarjeta {{ pago.tipoTarjeta }}</strong></p>
+                            <p><strong>Total: ${{ precioTotal }}</strong></p>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -284,8 +299,8 @@
             </div>
         </div>
     </div>
-    </div>
-    <script src="js/vue.js"></script>
+
+    <script src="js/app.js"></script>
 </body>
 
 </html>
