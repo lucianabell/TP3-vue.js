@@ -1,0 +1,77 @@
+body {
+    background-color: #f8f8f8 !important;
+    margin: 0;
+    padding: 0;
+    
+}
+
+form, article {
+    max-width: 800px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+article{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+
+/* Para Chrome, Opera y Safari */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+input[type="number"] {
+    appearance: textfield;
+}
+
+label{
+    font-size: 0.9rem !important;
+}
+
+legend {
+    font-size: 1rem !important;
+    font-weight: 600;
+}
+
+#numeroTarjeta, #cvv{
+    padding-left: 50px;
+}
+
+.tarjetas-imagen img{
+    max-width: 35px;
+}
+
+#tarjeta, #divDestino, #divOrigen, #divCvv{
+    position: relative;
+}
+
+#imgDestino, #imgOrigen, #imgCvv, .tarjetas-imagen{
+    display: block;
+    position: absolute;
+    top: 33px;
+    left: 15px; 
+}
+
+#destino, #origen{
+    padding-left: 40px;
+}
+
+#numeroBoletos {
+    text-align: center;
+    padding-right: .5rem !important;
+    background: none !important;
+  }
+
+
+@media (min-width: 768px) {
+    label{
+        font-size: 1rem !important;
+    }
+   
+}
