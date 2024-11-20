@@ -4,107 +4,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="icon" href="icon/logoitse.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
     <title>ITSE TV</title>
-    <link rel="icon" href="icon/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+    <a id="top"></a>
     <!-- Encabezado -->
     <header>
-        <div align="center">
-            <a href="index.html">
-                <img src="icon/logoitse.png" width="20px" height="20px" alt="logo ITSE">
-                <span style="color:#555555;">ITSE TV</span>
+        <div class="contenedor-header">
+            <a href="index.html" class="logo">
+                <img src="icon/logoitse.png" alt="logo ITSE">
+                <span>ITSE TV</span>
             </a>
+            <!-- Botón de Menu -->
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <i class="fa-solid fa-bars" id="open"></i>
+                <i class="fa-solid fa-xmark" id="close"></i>
+            </label>
+            <!-- Menú de Navegación -->
+            <nav id="nav-bar">
+                <!-- Lista Desordenada -->
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="programas.html">Programas</a></li>
+                    <li><a href="index.html#articulos">Artículos</a></li>
+                    <li><a href="index.html#nosotros">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
         </div>
-        <!-- Menú de Navegación -->
-        <nav>
-            <!-- Lista Desordenada -->
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="programas.html">Programas</a></li>
-                <li><a href="index.html#articulos">Artículos</a></li>
-                <li><a href="index.html#nosotros">Nosotros</a></li>
-                <li><a href="index.html#contacto">Contacto</a></li>
-            </ul>
-        </nav>
     </header>
 
     <main>
-        <section>
-            <h2 align="center">Nuestra Programacion</h2>
-            <article>
-                <h3 align="center">¿Qué programamos?</h3>
-                <p align="center">Acompañanos explora el alcance e impacto de la programación en nuestras vida diaria a través de un ciclo de entrevistas con expertos en programación.</p>
-                <div align="center">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
+        <section id="programacion">
+            <h2>Nuestra Programación</h2>
+            <div class="carrusel-programacion">
+                <input type="radio" id="control1" name="carrusel-control" checked>
+                <article class="card card-1">
+                    <iframe src="https://www.youtube.com/embed/rbhcR2lLzvo?si=nv-b8pbr1wro93ks"
                         title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </iframe>
-                </div>
-            </article>
-            <br>
-            <article align="center">
-                <h3 align="center">Historia de la programación</h3>
-                <p align="center">Un recorrido por los eventos históricos que marcaron el avance de la programación.</p>
-                <div align="center">
-                    <!-- Video en vivo mediante iframe -->
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
+                    <h3>¿Qué programamos?</h3>
+                    <p>Acompáñanos a explorar el alcance e impacto de la programación en nuestras vidas a través de un
+                        ciclo de entrevistas con expertos en programación.</p>
+                </article>
+
+                <input type="radio" id="control2" name="carrusel-control">
+                <article class="card card-2">
+                    <iframe src="https://www.youtube.com/embed/TrzZ7YQyXbs?si=f9_ovUkLUt8eR6v7"
                         title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </iframe>
+                    <h3>Historia de la programación</h3>
+                    <p>Un recorrido por los eventos históricos que marcaron el avance de la programación.</p>
+                </article>
+                <div class="control">
+                    <label for="control1"><i class="fa-regular fa-circle"></i></label>
+                    <label for="control2"><i class="fa-regular fa-circle"></i></label>
                 </div>
-            </article>
-        </section>
-        <br>
-        <section id="horario">
-            <h2 align="center">Horario de Programación</h2>
-            <!-- Tabla -->
-             <div align="center">
-                 <table border="1" width="60%">
-                     <thead>
-                         <tr>
-                             <th>Día</th>
-                             <th>Programa</th>
-                             <th>Horario</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <tr>
-                             <td>Martes</td>
-                             <td>¿Qué programamos?</td>
-                             <td>8:00 PM</td>
-                         </tr>
-                         <tr>
-                             <td>Jueves</td>
-                             <td>Historia de la programación</td>
-                             <td>9:00 PM</td>
-                         </tr>
-                     </tbody>
-                 </table>
-             </div>
-        </section>
-        <br><br>
-        <section>
-            <h2 align="center">Transmisión en Vivo</h2>
-            <div align="center">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/7NOSDKb0HlU?si=RsjgURqpdA4ehmw3"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                </iframe>
             </div>
         </section>
-        <br>
-        <br>
+
+        <section id="horario">
+            <h2>Horarios</h2>
+            <!-- Tabla -->
+            <div class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>Programa</th>
+                            <th>Horario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Martes</td>
+                            <td>¿Qué programamos?</td>
+                            <td>8:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Jueves</td>
+                            <td>Historia de la programación</td>
+                            <td>9:00 PM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="transmision">
+            <h2>Transmisión en Vivo</h2>
+            <iframe src="https://www.youtube.com/embed/7NOSDKb0HlU?si=RsjgURqpdA4ehmw3" title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+            </iframe>
+        </section>
+        
+        <a href="#top" id="btn-subir"><i class="fa-solid fa-arrow-up"></i></a>
     </main>
-        <!-- Footer -->
-    <footer style="background-color: #2b2b2b; color: #ffffff;">
-        <br>
-        <p align="center">&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
-        <br>
+    <!-- Footer -->
+    <footer>
+        <div class="redes">
+            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2024 ITSE TV. Todos los derechos reservados.</p>
     </footer>
 </body>
 
